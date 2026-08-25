@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Aage Kaun — Sanmarg : Aparajita" description="Aage Kaun — Aparajita, an initiative by Sanmarg.">
+<section>
+        <div class="container sec-pad">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="inside-header">
+                        <h1>Aage Kaun</h1>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="sec-pad grad-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-9 mx-auto d-block">
+                    <h3 class="text-center hindi-font fw-bold quote-font">कभी आतिश, कभी बारिश, कभी संगिनी बन जाती है, हार से जो ह्रास न हो, <span>अपराजिता</span> कहलाती है; हर <span>नारी</span> के अंदर बसती है एक आवाज़ &#8211; अपराजिता हूँ मैं। अगर आप उस एहसास को <span>पहचान</span> दिलाना चाहते हैं तो <b>आगे कौन</b> है आपका ज़रिया।</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>Filling this form gives you the opportunity to nominate yourself or someone you know for an Aparajita. The entries from this form go through a rigorous selection process overseen by an esteemed jury. EY are our process advisers and official tabulators, ensuring fair and transparent nominations.</p>
+                    <p>Please cast your nomination for one of the following categories. Depending upon entries received, categories will be shortlisted for the final event.</p>
+                    <h2 class="sub-hdr text-uppercase my-5 motif motif-1">APARAJITA &#8211; AAGE KAUN</h2>
+                     <p> All nominations received will be retained and considered for future editions of Aparajita. </p>
+                    <div class="col-sm-12 sec-pad">
+                    </div>
+<section class="sec-pad">
+  <div class="container">
+    <form class="form-grid" data-nominate novalidate>
+      <label class="full"><span>Name of the suggested candidate *</span><input type="text" name="candidate-name" required /></label>
+      <label><span>Her mobile number *</span><input type="tel" name="her-contact" required /></label>
+      <label><span>Her email ID *</span><input type="email" name="her-email" required /></label>
+      <label><span>Her age as on March 2026 *</span>
+        <select name="her_age" required>
+          <option>18-25</option><option>26-35</option><option>36-45</option>
+          <option>46-55</option><option>56-65</option><option>Over 66</option>
+        </select>
+      </label>
+      <label><span>Her area of expertise *</span>
+        <select name="areaofexpertise" required>
+          <option>Agriculture and Agricultural Products</option>
+          <option>Arts &amp; Design</option>
+          <option>Business &amp; Entrepreneurship</option>
+          <option>Community Service</option>
+          <option>Education</option>
+          <option>Health &amp; Wellness</option>
+          <option>Technology &amp; Science</option>
+          <option>Sports</option>
+          <option>Others</option>
+        </select>
+      </label>
+      <label class="full"><span>If others, please specify</span><input type="text" name="other-expertise" /></label>
+      <label class="full"><span>How is she a leader in her field? * (career highlights, experience and achievements in 200 words)</span><textarea name="leader" rows="5" required></textarea></label>
+      <p class="full" style="margin:0"><b>Your contact details</b><br />It's lovely if you are filling the form for yourself. Just put in your details again!</p>
+      <label><span>Your name *</span><input type="text" name="yours-name" required /></label>
+      <label><span>Your mobile number *</span><input type="tel" name="yours-contact" required /></label>
+      <label><span>Your email ID *</span><input type="email" name="yours-email" required /></label>
+      <div class="full" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <button class="custom-button" type="submit"><span class="btn-text">Submit Nomination</span><span class="btn-arrow"><span>&#8594;</span></span></button>
+        <span style="font-size:13px;color:#6a7276">* Mandatory Fields</span>
+      </div>
+      <p class="full" data-nominate-status role="status" style="color:var(--color-secondary);min-height:1.2em"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const nomForm = document.querySelector<HTMLFormElement>('[data-nominate]');
+  const nomStatus = document.querySelector<HTMLElement>('[data-nominate-status]');
+  nomForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!nomForm.checkValidity()) {
+      nomForm.reportValidity();
+      return;
+    }
+    if (nomStatus) nomStatus.textContent = 'Thank you — your nomination has been recorded.';
+    nomForm.reset();
+  });
+</script>
+
+<section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2 class="sub-hdr motif motif-1 my-4">FAQs</h2> 
+                </div>
+                <div class="col-sm-12 my-4">
+                    <div id="sp_easy_accordion-1751273798"><div id="sp-ea-6263" class="sp-ea-one sp-easy-accordion"><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62630" role="button" aria-controls="collapse62630" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> What is Aage Kaun?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62630" role="region" aria-labelledby="ea-header-62630"> <div class="ea-body"><p><span style="font-weight: 400">Aage Kaun is the name given to the nominations process for the Popular Awards for Aparajita every year. This is the award that is open to the public. Anyone can apply to Aparajita through our website, </span><a href="/cdn-cgi/l/email-protection#b0d1c0d1c2d1dad9c4d1f0c3d1deddd1c2d79ed9de"><span style="font-weight: 400"><span class="__cf_email__">aparajita@sanmarg.in</span></span></a><span style="font-weight: 400"> according to the categories that are released each year. Additionally, we also add in candidates ourselves - people who have reached out to us before, those who have been personally recommended by trusted sources, those we have come across on social media and seem a good fit, etc. We only nominate women over 18 years of age and with at least 2 years of experience in doing something exemplary.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62631" role="button" aria-controls="collapse62631" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> When does Aage Kaun start?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62631" role="region" aria-labelledby="ea-header-62631"> <div class="ea-body"><p><span style="font-weight: 400">Nominees can send us their information throughout the year, but we start compiling our database in one go.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62632" role="button" aria-controls="collapse62632" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> How do people get to know about Aage Kaun?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62632" role="region" aria-labelledby="ea-header-62632"> <div class="ea-body"><p><span style="font-weight: 400">A form on our website is live throughout the year. Sometimes we’ll place a popup on the website. Closer to the event, we publish advertisements in the Sanmarg newspaper, put content on social media platforms, do radio spots, billboards and so on. We manually email, call and text our sponsors and people who’ve associated with us in the past. In recent years, we’ve also explored WhatsApp API and are open to automating marketing processes.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62633" role="button" aria-controls="collapse62633" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> What kind of form do people fill to get nominated?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62633" role="region" aria-labelledby="ea-header-62633"> <div class="ea-body"><p><span style="font-weight: 400">Typically, there’s a straightforward Google Form that asks for a candidate’s name, comprehensive contact information, place of residence, years of experience and field of work and more basic information along these lines; usually we also ask for a couple of paragraphs on how they’ve contributed to their fields or why they think they deserve an Aparajita award. A form can be filled by an interested woman, but it can also be filled on behalf of someone; i.e. if I wish to nominate someone I know, I can do that comfortably, provided I fill in their information correctly.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62634" role="button" aria-controls="collapse62634" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> What kind of enquiries do we receive about Aage Kaun?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62634" role="region" aria-labelledby="ea-header-62634"> <div class="ea-body"><p><span style="font-weight: 400">Since we advertise about Aage Kaun on many platforms (the most persistent being newspaper ads and social media) people come across this information in different ways. Interested women filling the form from a link in our Instagram bio, for example, might also send us Instagram/Facebook DMs as a follow-up, asking for more information. People call and e-mail us directly as well. It’s important to have a team on top of communication at all times so we don’t miss a prospective nominee.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62635" role="button" aria-controls="collapse62635" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> What happens after Aage Kaun entries are received?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62635" role="region" aria-labelledby="ea-header-62635"> <div class="ea-body"><p><span style="font-weight: 400">Once we have collected all the information of people registering themselves as prospective nominees, we may choose to close Aage Kaun a few months before the event. Think of this as us having received applications for round one. We sort through all the entries and reach out to the most prospective candidates for round two of vetting. We ask them to fill another form that is more comprehensive - this is an insight form and consists of deeper questions that help us understand the candidates better and perform what is essentially a background check. We also cut down and finalise our categories for the awards for that year, based simply on the categories for which we have the most responses - or for those we deem otherwise appropriate.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62636" role="button" aria-controls="collapse62636" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> Once we have a database of prospective nominees…</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62636" role="region" aria-labelledby="ea-header-62636"> <div class="ea-body"><p><span style="font-weight: 400">The insight forms are reviewed once again by our team and we enlist our council to shortlist the ones that resonate with the Sanmarg Aparajita mission the most. This is typically done at a physical pre-event council meet. Here, the standout stories are discussed and scored by the council appropriately in accordance with a special rubric that is set by EY (who are our official tabulators and process advisors). This is a fair and confidential scoring process where each council member casts their own scores in an undisclosed form that is only ever revealed to the team at EY. At the end of this exercise, we typically finalise 3 nominees for every category.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62637" role="button" aria-controls="collapse62637" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> What happens to rejected candidates?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62637" role="region" aria-labelledby="ea-header-62637"> <div class="ea-body"><p><span style="font-weight: 400">Due to the huge number of applications we get, we only get back to shortlisted nominees about their nomination.</span></p></div></div></div><div class="ea-card sp-ea-single"><h3 class="ea-header"><a class="collapsed" id="ea-header-62638" role="button" aria-controls="collapse62638" href="#" aria-expanded="false" tabindex="0"><i aria-hidden="true" role="presentation" class="ea-expand-icon eap-icon-ea-expand-plus"></i> How are nominees informed about their candidature?</a></h3><div class="sp-collapse spcollapse spcollapse" id="collapse62638" role="region" aria-labelledby="ea-header-62638"> <div class="ea-body"><p><span style="font-weight: 400">We email and call them and generally stay in close touch with them from this point on. Nominations are declared on the website, on social media and in the Sanmarg newspapers. Once nominees are declared, voting begins.</span></p></div></div></div></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</Base>

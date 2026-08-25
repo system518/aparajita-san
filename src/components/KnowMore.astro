@@ -1,0 +1,36 @@
+---
+---
+<section class="content-gap">
+  <div class="container grid">
+    <div class="copy">
+      <h2 class="display-4">Want to know more?</h2>
+      <p>
+        Please follow our socials for updates. Leave your details below for us to send them
+        straight to your inbox.
+      </p>
+      <img class="motif" src="/images/teaser-area-img.webp" alt="" loading="lazy" />
+    </div>
+
+    <figure class="shot">
+      <img src="/images/monalisha_sarkar_mitra.webp" alt="Aparajita 2024 ceremony" loading="lazy" />
+    </figure>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 4fr 7fr;
+    gap: 8%;
+    align-items: center;
+  }
+  .copy h2 { margin-bottom: 22px !important; }
+  .copy p { max-width: 34ch; }
+  .motif { display: block; width: 100%; max-width: 300px; margin-top: 24px; }
+  figure { margin: 0; }
+  figure img { width: 100%; display: block; }
+
+  @media (max-width: 991px) {
+    .grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+</style>

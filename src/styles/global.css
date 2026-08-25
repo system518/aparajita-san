@@ -1,0 +1,157 @@
+/* ---- Self-hosted brand fonts ---- */
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/FONTSPRINGDEMO-TheSeasonsLightRegular.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/FONTSPRINGDEMO-TheSeasonsRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/FONTSPRINGDEMO-TheSeasonsLightItalic.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Web';
+  src: url('/fonts/Helvetica.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Web';
+  src: url('/fonts/Helvetica-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Akhand Devanagari';
+  src: url('/fonts/AkhandDevanagari.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --color-default: #161616;
+  --color-primary: #262c30;
+  --color-secondary: #f04c56;
+  --font-primary: 'The Seasons', 'Cormorant Garamond', Georgia, serif;
+  --font-secondary: 'Helvetica Web', Helvetica, Arial, sans-serif;
+  --font-hindi: 'Akhand Devanagari', var(--font-primary);
+  --gutter: 60px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  color: var(--color-default);
+  font-family: var(--font-secondary);
+  background: url('/images/body-bg.webp') repeat;
+}
+
+img { max-width: 100%; height: auto; }
+
+a {
+  font-family: var(--font-secondary);
+  color: var(--color-secondary);
+  text-decoration: none;
+  transition: all ease-in-out 0.3s;
+}
+a:hover { color: var(--color-primary); }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-primary);
+  font-weight: 300;
+  line-height: 1.2em;
+  margin: 0;
+  padding: 0;
+}
+h2 span { font-style: italic; font-weight: 300; }
+
+p {
+  font-family: var(--font-secondary);
+  font-size: 17px;
+  line-height: 1.5em;
+  margin: 0 0 1.4rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 36px;
+}
+
+.content-gap { padding-block: 100px; }
+
+.display-4 {
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 1.2em;
+}
+
+/* split text + arrow button, as on the original */
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-default);
+  color: var(--color-default);
+  text-transform: uppercase;
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+.custom-button .btn-text { padding: 12px 26px; text-align: center; }
+.custom-button .btn-arrow {
+  padding: 12px 20px;
+  border-left: 1px solid var(--color-default);
+  display: flex;
+  align-items: center;
+}
+.custom-button .btn-arrow span { display: inline-block; transition: transform 0.3s ease; }
+.custom-button.button-active,
+.custom-button:hover { border-color: var(--color-secondary); color: var(--color-secondary); }
+.custom-button.button-active .btn-arrow,
+.custom-button:hover .btn-arrow { border-left-color: var(--color-secondary); }
+.custom-button:hover .btn-arrow span { transform: translateX(5px); }
+
+.eyebrow {
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: 14px;
+}
+
+.row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8%;
+  align-items: center;
+}
+
+.down-arrow { display: block; margin: 40px auto 0; width: 16px; }
+.down-arrow img { width: 100%; display: block; }
+
+@media (max-width: 991px) {
+  .content-gap { padding-block: 64px; }
+  .display-4 { font-size: 2.4rem; }
+  .row-2col { grid-template-columns: 1fr; gap: 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

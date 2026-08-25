@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import '../styles/pages.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/cropped-android-chrome-192x192-1.webp" />
+    <link rel="icon" href="/images/cropped-android-chrome-192x192-1-32x32.webp" />
+    <link rel="apple-touch-icon" href="/images/cropped-android-chrome-192x192-1-180x180.webp" />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // accordions ported from the original archive / FAQ sections
+      document.querySelectorAll<HTMLButtonElement>('.accordion-button').forEach((button) => {
+        const id = button.getAttribute('aria-controls');
+        const panel = id ? document.getElementById(id) : null;
+        if (!panel) return;
+
+        const open = button.getAttribute('aria-expanded') === 'true';
+        panel.classList.toggle('show', open);
+        button.classList.toggle('collapsed', !open);
+
+        button.addEventListener('click', () => {
+          const isOpen = panel.classList.toggle('show');
+          button.setAttribute('aria-expanded', String(isOpen));
+          button.classList.toggle('collapsed', !isOpen);
+        });
+      });
+    </script>
+  </body>
+</html>
