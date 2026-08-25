@@ -40,8 +40,10 @@ const { title, description } = Astro.props;
         const panel = id ? document.getElementById(id) : null;
         if (!panel) return;
 
-        const open = button.getAttribute('aria-expanded') === 'true';
-        panel.classList.toggle('show', open);
+        // The ported markup carries a stale aria-expanded on some buttons;
+        // the panel's own "show" class is what decided the state originally.
+        const open = panel.classList.contains('show');
+        button.setAttribute('aria-expanded', String(open));
         button.classList.toggle('collapsed', !open);
 
         button.addEventListener('click', () => {
@@ -49,6 +51,171 @@ const { title, description } = Astro.props;
           button.setAttribute('aria-expanded', String(isOpen));
           button.classList.toggle('collapsed', !isOpen);
         });
+      });
+    </script>
+
+    <script>
+      // ---- profile modals -------------------------------------------------
+      // Cards expose a name only; each modal carries the matching title.
+      // Link them by normalised name so "View profile" opens the right one.
+      const normalise = (value: string) =>
+        value.replace(/[^a-z0-9]+/gi, ' ').trim().toLowerCase();
+
+      const modals = Array.from(document.querySelectorAll<HTMLElement>('.modal'));
+
+      const closeModal = (modal: HTMLElement) => {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        if (!document.querySelector('.modal.show')) {
+          document.body.classList.remove('modal-open');
+        }
+      };
+
+      const openModal = (modal: HTMLElement) => {
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+      };
+
+      modals.forEach((modal) => {
+        modal.querySelectorAll<HTMLButtonElement>('.modal-header .btn').forEach((button) => {
+          button.setAttribute('aria-label', 'Close');
+          button.addEventListener('click', () => closeModal(modal));
+        });
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) closeModal(modal);
+        });
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        document.querySelectorAll<HTMLElement>('.modal.show').forEach(closeModal);
+      });
+
+      document.querySelectorAll<HTMLAnchorElement>('.view-profile').forEach((link) => {
+        const card = link.closest<HTMLElement>('[class*="col-"]');
+        const name = card?.querySelector('.name')?.textContent;
+        if (!name) {
+          link.remove();
+          return;
+        }
+
+        // Prefer a modal from the same year block before falling back to the page.
+        const scope = link.closest<HTMLElement>('.accordion-body') ?? document.body;
+        const wanted = normalise(name);
+        const match =
+          modals.find(
+            (modal) =>
+              scope.contains(modal) &&
+              normalise(modal.querySelector('.modal-title')?.textContent ?? '') === wanted
+          ) ??
+          modals.find(
+            (modal) => normalise(modal.querySelector('.modal-title')?.textContent ?? '') === wanted
+          );
+
+        if (!match) {
+          link.remove();
+          return;
+        }
+
+        link.textContent = 'i';
+        link.setAttribute('role', 'button');
+        link.setAttribute('tabindex', '0');
+        link.setAttribute('title', `About ${name.trim()}`);
+        link.setAttribute('aria-label', `About ${name.trim()}`);
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          openModal(match);
+        });
+        link.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          event.preventDefault();
+          openModal(match);
+        });
+      });
+
+      // ---- category filters ----------------------------------------------
+      // Labels and card categories are worded loosely ("Community Service" vs
+      // "(Community Service & Advocacy)"), so match on containment, and read the
+      // category from .category where present and .deg on the older year blocks.
+      const categoryKey = (value: string) =>
+        normalise(value).replace(/\band\b/g, ' ').replace(/\s+/g, ' ').trim();
+
+      const allElements = Array.from(document.querySelectorAll<HTMLElement>('*'));
+
+      document.querySelectorAll<HTMLSelectElement>('select[id^="selectOption"]').forEach((select) => {
+        // Duplicate ids repeat across year blocks, so take the next "show..."
+        // block in document order rather than looking one up by id.
+        const from = allElements.indexOf(select);
+        const list = allElements.find(
+          (element, index) => index > from && element.id.startsWith('show')
+        );
+        if (!list) return;
+
+        const cards = Array.from(list.querySelectorAll<HTMLElement>('[class*="col-"]')).filter(
+          (card) => card.querySelector('.name')
+        );
+        if (!cards.length) return;
+
+        const categoryOf = (card: HTMLElement) =>
+          categoryKey(card.querySelector('.category')?.textContent ?? card.querySelector('.deg')?.textContent ?? '');
+
+        select.addEventListener('change', () => {
+          const label = (select.options[select.selectedIndex]?.text ?? '').trim();
+          const wanted = categoryKey(label);
+          const showAll = !wanted || /^(all|select)\b/i.test(label);
+
+          cards.forEach((card) => {
+            const category = categoryOf(card);
+            const hit = showAll || (category !== '' && (category.includes(wanted) || wanted.includes(category)));
+            card.classList.toggle('hidden', !hit);
+          });
+        });
+      });
+
+      // ---- photo carousels -------------------------------------------------
+      // Caption-less tile grids are the ceremony / meet photo galleries; the
+      // captioned ones are people listings and stay as grids.
+      document.querySelectorAll<HTMLElement>('ul.tile-grid').forEach((grid) => {
+        if (grid.querySelector('figcaption')) return;
+        const slides = grid.children.length;
+        if (slides < 2) return;
+
+        const carousel = document.createElement('div');
+        carousel.className = 'gallery-carousel';
+        grid.parentNode?.insertBefore(carousel, grid);
+        carousel.appendChild(grid);
+
+        const prev = document.createElement('button');
+        prev.type = 'button';
+        prev.className = 'gallery-nav prev';
+        prev.setAttribute('aria-label', 'Previous photos');
+
+        const next = document.createElement('button');
+        next.type = 'button';
+        next.className = 'gallery-nav next';
+        next.setAttribute('aria-label', 'Next photos');
+
+        carousel.append(prev, next);
+
+        const step = () => {
+          const first = grid.firstElementChild as HTMLElement | null;
+          return first ? first.getBoundingClientRect().width + 20 : grid.clientWidth;
+        };
+
+        const sync = () => {
+          const max = grid.scrollWidth - grid.clientWidth - 1;
+          prev.disabled = grid.scrollLeft <= 0;
+          next.disabled = grid.scrollLeft >= max;
+        };
+
+        prev.addEventListener('click', () => grid.scrollBy({ left: -step(), behavior: 'smooth' }));
+        next.addEventListener('click', () => grid.scrollBy({ left: step(), behavior: 'smooth' }));
+        grid.addEventListener('scroll', sync, { passive: true });
+        window.addEventListener('resize', sync);
+        // Panels start collapsed, so measure once they are actually laid out.
+        new ResizeObserver(sync).observe(grid);
+        sync();
       });
     </script>
   </body>
