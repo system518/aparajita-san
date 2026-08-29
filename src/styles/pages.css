@@ -533,3 +533,116 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 575px) {
   .gallery-carousel .tile-grid > li { flex: 0 0 100%; }
 }
+
+/* ---- The Aparajita Institution page -------------------------------------
+   This page was ported with its own apj-* markup rather than the .container
+   grid the other pages use, so it needs its own width + rhythm. */
+#apj-page {
+  --apj-ink-soft: #6a7276;
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 36px;
+  padding-block: 40px 20px;
+}
+
+.apj-kicker {
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: 0.6rem;
+}
+.apj-h1 {
+  font-size: 56px;
+  font-weight: 400;
+  margin: 0 0 50px;
+}
+.apj-h2 {
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--color-secondary);
+  margin: 0 0 30px;
+}
+
+/* letter: portrait on the left, the letter it belongs to on the right */
+.apj-letter {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 2fr);
+  gap: var(--gutter);
+  align-items: start;
+  margin-bottom: 70px;
+}
+.apj-letter-text { order: 2; }
+.apj-letter-text p { margin-bottom: 1.4rem; }
+.apj-em {
+  font-family: var(--font-primary);
+  font-size: 22px;
+  line-height: 1.6em;
+  color: var(--color-secondary);
+}
+.apj-hi { font-family: var(--font-hindi); }
+.apj-letter-photo { order: 1; max-width: 300px; }
+.apj-letter-photo img {
+  display: block !important;
+  width: 100% !important;
+  max-height: 380px !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  max-width: none !important;
+  border: none !important;
+}
+
+.apj-sign { margin-top: 40px; }
+.apj-sign p { margin-bottom: 0; }
+.apj-sign-name {
+  font-family: var(--font-primary);
+  font-size: 26px;
+  line-height: 1.2em;
+}
+.apj-sign-role {
+  font-size: 15px;
+  line-height: 1.5em;
+  color: var(--apj-ink-soft);
+}
+
+.apj-inst { max-width: 900px; }
+
+#apj-page .tile-grid img { aspect-ratio: 4 / 3; }
+
+.apj-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  margin: 40px 0 45px;
+  border-block: 1px solid #e3e5e6;
+  padding-block: 35px;
+}
+.apj-stat-num {
+  font-family: var(--font-primary);
+  font-size: 40px;
+  line-height: 1.1em;
+  color: var(--color-secondary);
+  margin-bottom: 8px;
+}
+.apj-stat-label {
+  font-size: 15px;
+  line-height: 1.4em;
+  color: var(--apj-ink-soft);
+  margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+  #apj-page { padding-inline: 20px; }
+  .apj-h1 { font-size: 38px; margin-bottom: 35px; }
+  .apj-h2 { font-size: 28px; }
+  .apj-letter {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 35px;
+    margin-bottom: 50px;
+  }
+  .apj-letter-photo { max-width: 380px; }
+  .apj-stats { grid-template-columns: minmax(0, 1fr); gap: 25px; }
+  .apj-stat-num { font-size: 32px; }
+}
