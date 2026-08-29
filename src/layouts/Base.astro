@@ -173,6 +173,79 @@ const { title, description } = Astro.props;
         });
       });
 
+      // ---- Akaar featured-story cards --------------------------------------
+      // Same nav treatment as the photo carousels below, but the track is the
+      // ported .slide_track rather than a tile grid.
+      document.querySelectorAll<HTMLElement>('.slider_div').forEach((carousel) => {
+        const track = carousel.querySelector<HTMLElement>('.slide_track');
+        if (!track || track.children.length < 2) return;
+
+        const prev = document.createElement('button');
+        prev.type = 'button';
+        prev.className = 'gallery-nav prev';
+        prev.setAttribute('aria-label', 'Previous stories');
+
+        const next = document.createElement('button');
+        next.type = 'button';
+        next.className = 'gallery-nav next';
+        next.setAttribute('aria-label', 'Next stories');
+
+        carousel.append(prev, next);
+
+        const step = () => {
+          const first = track.firstElementChild as HTMLElement | null;
+          return first ? first.getBoundingClientRect().width + 30 : track.clientWidth;
+        };
+
+        const sync = () => {
+          const max = track.scrollWidth - track.clientWidth - 1;
+          prev.disabled = track.scrollLeft <= 0;
+          next.disabled = track.scrollLeft >= max;
+        };
+
+        prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+        next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+        track.addEventListener('scroll', sync, { passive: true });
+        window.addEventListener('resize', sync);
+        new ResizeObserver(sync).observe(track);
+        sync();
+
+        // Advance one card every few seconds, right to left, wrapping at the
+        // end. Paused while the pointer or keyboard focus is in the carousel so
+        // it never slides a story out from under someone reading it, and off
+        // entirely for visitors who ask for reduced motion.
+        const stillMoving = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (stillMoving.matches) return;
+
+        let timer = 0;
+        const advance = () => {
+          const max = track.scrollWidth - track.clientWidth - 1;
+          if (track.scrollLeft >= max) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            track.scrollBy({ left: step(), behavior: 'smooth' });
+          }
+        };
+        const play = () => {
+          if (!timer) timer = window.setInterval(advance, 4000);
+        };
+        const pause = () => {
+          window.clearInterval(timer);
+          timer = 0;
+        };
+
+        carousel.addEventListener('mouseenter', pause);
+        carousel.addEventListener('mouseleave', play);
+        carousel.addEventListener('focusin', pause);
+        carousel.addEventListener('focusout', play);
+        carousel.addEventListener('touchstart', pause, { passive: true });
+        // Nothing to advance to while the section is off screen.
+        new IntersectionObserver(
+          ([entry]) => (entry.isIntersecting ? play() : pause()),
+          { threshold: 0 }
+        ).observe(carousel);
+      });
+
       // ---- photo carousels -------------------------------------------------
       // Caption-less tile grids are the ceremony / meet photo galleries; the
       // captioned ones are people listings and stay as grids.

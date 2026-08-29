@@ -13,6 +13,24 @@
   width: 100%;
 }
 
+/* Bootstrap cancels a row's negative margin with the padding of the column it
+   sits in. Some ported sections nest a .row straight inside another .row with
+   no column between, so the margins stacked and that content sat 12px left of
+   the rest of the page. */
+.row > .row {
+  flex: 0 0 100%;
+  max-width: 100%;
+  margin-inline: 0;
+}
+/* Ported sections also drop a bare .container or <section> straight into a
+   .row. As flex items with no col-* width they shrank to fit and lined up
+   side by side, so give them a full line too. */
+.row > .container,
+.row > section {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
 .col-12, .col-sm-12 { flex: 0 0 100%; max-width: 100%; }
 .col-6 { flex: 0 0 50%; max-width: 50%; }
 .col-4 { flex: 0 0 33.333%; max-width: 33.333%; }
@@ -646,3 +664,106 @@ body.modal-open { overflow: hidden; }
   .apj-stats { grid-template-columns: minmax(0, 1fr); gap: 25px; }
   .apj-stat-num { font-size: 32px; }
 }
+
+
+/* Section titles: .sec-header had no styles at all, so its h2 fell back to the
+   browser default size. The italic <span> highlight comes from the base
+   h2 span rule. */
+.sec-header h2 {
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 1.2em;
+  margin: 0;
+}
+.sec-header h3 { font-size: 20px; margin: 6px 0 0; }
+
+@media (max-width: 991px) {
+  .sec-header h2 { font-size: 30px; }
+}
+
+/* ---- Akaar "Featured Stories" card carousel ------------------------------
+   Ported with its own slider_div / slide_track markup and no styles, so the
+   cards stacked full width. Same scroll-snap + .gallery-nav treatment as the
+   photo grids, but sized for a card with an image and a body of text. */
+.slider_div {
+  position: relative;
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 36px;
+}
+.slide_track {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-block: 10px;
+}
+.slide_track::-webkit-scrollbar { display: none; }
+.slide-image {
+  flex: 0 0 calc((100% - 60px) / 3);
+  scroll-snap-align: start;
+}
+
+.slide-image .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border: 1px solid #e3e5e6;
+  overflow: hidden;
+}
+.slide-image .card-image img {
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  object-fit: cover;
+  display: block;
+  margin: 28px auto 0;
+}
+.slide-image .card-text { padding: 20px 24px 28px; text-align: center; }
+.slide-image .card-text #name p {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  line-height: 1.2em;
+  margin-bottom: 0;
+}
+/* the ported markup puts a <br> after every name; the padding handles it */
+.slide-image .card-text #name br { display: none; }
+.slide-image .card-text > p {
+  font-size: 15px;
+  line-height: 1.6em;
+  margin: 14px 0 0;
+}
+
+.slider_div .gallery-nav.prev { left: 0; }
+.slider_div .gallery-nav.next { right: 0; }
+
+@media (max-width: 991px) {
+  .slider_div { padding-inline: 20px; }
+  .slide-image { flex: 0 0 calc((100% - 30px) / 2); }
+}
+@media (max-width: 575px) {
+  .slide-image { flex: 0 0 100%; }
+}
+
+
+/* ---- body copy lists -----------------------------------------------------
+   Ported lists wrap every item in a <p>, whose 1.4rem bottom margin opened a
+   full blank line between bullets. Keep the paragraph rhythm between list
+   items modest, and pull the markers in so they line up with the text column
+   rather than sitting 40px out on the browser default indent. */
+.founder-area ul,
+.container ul:not([class]) {
+  margin: 0 0 1.4rem;
+  padding-left: 1.2em;
+}
+.founder-area ul > li,
+.container ul:not([class]) > li {
+  margin-bottom: 0.35rem;
+}
+/* the <p> inside each item carries the site-wide 1.4rem bottom margin, which
+   opened a full blank line between bullets */
+li > p:last-child { margin-bottom: 0; }
