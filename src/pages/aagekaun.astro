@@ -36,37 +36,58 @@ import Base from '../layouts/Base.astro';
 <section class="sec-pad">
   <div class="container">
     <form class="form-grid" data-nominate novalidate>
-      <label class="full"><span>Name of the suggested candidate *</span><input type="text" name="candidate-name" required /></label>
-      <label><span>Her mobile number *</span><input type="tel" name="her-contact" required /></label>
-      <label><span>Her email ID *</span><input type="email" name="her-email" required /></label>
-      <label><span>Her age as on March 2026 *</span>
-        <select name="her_age" required>
-          <option>18-25</option><option>26-35</option><option>36-45</option>
-          <option>46-55</option><option>56-65</option><option>Over 66</option>
-        </select>
-      </label>
-      <label><span>Her area of expertise *</span>
-        <select name="areaofexpertise" required>
-          <option>Agriculture and Agricultural Products</option>
-          <option>Arts &amp; Design</option>
-          <option>Business &amp; Entrepreneurship</option>
-          <option>Community Service</option>
-          <option>Education</option>
-          <option>Health &amp; Wellness</option>
-          <option>Technology &amp; Science</option>
-          <option>Sports</option>
-          <option>Others</option>
-        </select>
-      </label>
-      <label class="full"><span>If others, please specify</span><input type="text" name="other-expertise" /></label>
-      <label class="full"><span>How is she a leader in her field? * (career highlights, experience and achievements in 200 words)</span><textarea name="leader" rows="5" required></textarea></label>
-      <p class="full" style="margin:0"><b>Your contact details</b><br />It's lovely if you are filling the form for yourself. Just put in your details again!</p>
-      <label><span>Your name *</span><input type="text" name="yours-name" required /></label>
-      <label><span>Your mobile number *</span><input type="tel" name="yours-contact" required /></label>
-      <label><span>Your email ID *</span><input type="email" name="yours-email" required /></label>
-      <div class="full" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-        <button class="custom-button" type="submit"><span class="btn-text">Submit Nomination</span><span class="btn-arrow"><span>&#8594;</span></span></button>
-        <span style="font-size:13px;color:#6a7276">* Mandatory Fields</span>
+      <!-- step 1: about the candidate -->
+      <fieldset class="full form-step" data-step="1">
+        <div class="form-grid">
+          <label class="full"><span>Name of the suggested candidate *</span><input type="text" name="candidate-name" required /></label>
+          <label><span>Her mobile number *</span><input type="tel" name="her-contact" required /></label>
+          <label><span>Her email ID *</span><input type="email" name="her-email" required /></label>
+          <fieldset class="full radio-field">
+            <legend>Her age as on March 2026 *</legend>
+            <label><input type="radio" name="her_age" value="18-25" required /><span>18-25</span></label>
+            <label><input type="radio" name="her_age" value="26-35" /><span>26-35</span></label>
+            <label><input type="radio" name="her_age" value="36-45" /><span>36-45</span></label>
+            <label><input type="radio" name="her_age" value="46-55" /><span>46-55</span></label>
+            <label><input type="radio" name="her_age" value="56-65" /><span>56-65</span></label>
+            <label><input type="radio" name="her_age" value="Over 66" /><span>Over 66</span></label>
+          </fieldset>
+          <label class="full"><span>Her area of expertise *</span>
+            <select name="areaofexpertise" required>
+              <option value="">Select a category</option>
+              <option>Agriculture and Agricultural Products</option>
+              <option>Arts &amp; Design</option>
+              <option>Business &amp; Entrepreneurship</option>
+              <option>Community Service</option>
+              <option>Education</option>
+              <option>Health &amp; Wellness</option>
+              <option>Technology &amp; Science</option>
+              <option>Sports</option>
+              <option>Others</option>
+            </select>
+          </label>
+          <label class="full"><span>If others, please specify.</span><input type="text" name="other-expertise" /></label>
+          <label class="full"><span>How is she a leader in her field?*</span>
+            <em class="field-hint">(tell us career highlights, experience and achievements in 200 words)</em>
+            <textarea name="leader" rows="5" required></textarea>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- step 2: about whoever is nominating -->
+      <fieldset class="full form-step" data-step="2" hidden>
+        <div class="form-grid">
+          <p class="full" style="margin:0"><b>Your contact details</b><br />It&#8217;s lovely if you are filling the form for yourself. Just put in your details again!</p>
+          <label><span>Your name *</span><input type="text" name="yours-name" required /></label>
+          <label><span>Your mobile number *</span><input type="tel" name="yours-contact" required /></label>
+          <label><span>Your email ID *</span><input type="email" name="yours-email" required /></label>
+        </div>
+      </fieldset>
+
+      <div class="full form-nav">
+        <button class="custom-button" type="button" data-nominate-prev hidden><span class="btn-text">Previous</span><span class="btn-arrow"><span>&#8592;</span></span></button>
+        <button class="custom-button" type="button" data-nominate-next><span class="btn-text">Next</span><span class="btn-arrow"><span>&#8594;</span></span></button>
+        <button class="custom-button" type="submit" data-nominate-submit hidden><span class="btn-text">Submit Nomination</span><span class="btn-arrow"><span>&#8594;</span></span></button>
+        <span class="form-note">* Mandatory Fields</span>
       </div>
       <p class="full" data-nominate-status role="status" style="color:var(--color-secondary);min-height:1.2em"></p>
     </form>
@@ -74,17 +95,58 @@ import Base from '../layouts/Base.astro';
 </section>
 
 <script>
+  // Two-step nomination form, as on the live site: candidate details, then the
+  // details of whoever is nominating. Each step is validated before it hands
+  // over to the next.
   const nomForm = document.querySelector<HTMLFormElement>('[data-nominate]');
   const nomStatus = document.querySelector<HTMLElement>('[data-nominate-status]');
-  nomForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
-    if (!nomForm.checkValidity()) {
-      nomForm.reportValidity();
-      return;
-    }
-    if (nomStatus) nomStatus.textContent = 'Thank you — your nomination has been recorded.';
-    nomForm.reset();
-  });
+
+  if (nomForm) {
+    const steps = Array.from(nomForm.querySelectorAll<HTMLElement>('.form-step'));
+    const prev = nomForm.querySelector<HTMLButtonElement>('[data-nominate-prev]');
+    const next = nomForm.querySelector<HTMLButtonElement>('[data-nominate-next]');
+    const submit = nomForm.querySelector<HTMLButtonElement>('[data-nominate-submit]');
+    let current = 0;
+
+    const show = (index: number) => {
+      current = index;
+      steps.forEach((step, i) => (step.hidden = i !== index));
+      if (prev) prev.hidden = index === 0;
+      if (next) next.hidden = index === steps.length - 1;
+      if (submit) submit.hidden = index !== steps.length - 1;
+      if (nomStatus) nomStatus.textContent = '';
+    };
+
+    // A step is complete when every required field inside it is valid.
+    const stepIsValid = (index: number) => {
+      const fields = Array.from(
+        steps[index].querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(
+          'input, select, textarea'
+        )
+      );
+      const bad = fields.find((field) => !field.checkValidity());
+      if (bad) {
+        bad.reportValidity();
+        return false;
+      }
+      return true;
+    };
+
+    next?.addEventListener('click', () => {
+      if (stepIsValid(current)) show(current + 1);
+    });
+    prev?.addEventListener('click', () => show(current - 1));
+
+    nomForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!stepIsValid(current)) return;
+      if (nomStatus) nomStatus.textContent = 'Thank you — your nomination has been recorded.';
+      nomForm.reset();
+      show(0);
+    });
+
+    show(0);
+  }
 </script>
 
 <section>

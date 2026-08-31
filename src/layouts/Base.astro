@@ -46,10 +46,46 @@ const { title, description } = Astro.props;
         button.setAttribute('aria-expanded', String(open));
         button.classList.toggle('collapsed', !open);
 
+        // A year's video starts when its panel opens and is torn down when it
+        // closes, so a collapsed panel is never playing in the background.
+        // Autoplay only survives muted — browsers block a sound-on start that
+        // the visitor did not ask for — so the frame comes up muted with its
+        // own controls; pausing or unmuting from there is the visitor's call,
+        // and we do not touch the frame again until the panel is toggled.
+        const videos = Array.from(panel.querySelectorAll<HTMLIFrameElement>('iframe[src*="youtube"]'));
+        videos.forEach((video) => {
+          if (!video.dataset.src) video.dataset.src = video.src;
+        });
+
+        const playVideos = () => {
+          videos.forEach((video) => {
+            const base = video.dataset.src ?? '';
+            if (!base) return;
+            const url = new URL(base, window.location.href);
+            url.searchParams.set('autoplay', '1');
+            url.searchParams.set('mute', '1');
+            url.searchParams.set('playsinline', '1');
+            video.src = url.toString();
+          });
+        };
+
+        const stopVideos = () => {
+          // Reassigning the original src reloads the frame, which stops audio
+          // and video; blanking it instead would leave an empty box behind.
+          videos.forEach((video) => {
+            if (video.dataset.src) video.src = video.dataset.src;
+          });
+        };
+
+        if (open) playVideos();
+        else stopVideos();
+
         button.addEventListener('click', () => {
           const isOpen = panel.classList.toggle('show');
           button.setAttribute('aria-expanded', String(isOpen));
           button.classList.toggle('collapsed', !isOpen);
+          if (isOpen) playVideos();
+          else stopVideos();
         });
       });
     </script>
@@ -249,6 +285,45 @@ const { title, description } = Astro.props;
       // ---- photo carousels -------------------------------------------------
       // Caption-less tile grids are the ceremony / meet photo galleries; the
       // captioned ones are people listings and stay as grids.
+      // ---- FAQ accordion (easy-accordion markup) ---------------------------
+      // The plugin's own collapse script is not part of this port; the panels
+      // carry .collapsed / aria-expanded already, so drive those directly.
+      document.querySelectorAll<HTMLAnchorElement>('.sp-easy-accordion .ea-header a').forEach((header) => {
+        const id = header.getAttribute('aria-controls');
+        const panel = id ? document.getElementById(id) : null;
+        if (!panel) return;
+
+        const open = panel.classList.contains('show');
+        header.classList.toggle('collapsed', !open);
+        header.setAttribute('aria-expanded', String(open));
+
+        header.addEventListener('click', (event) => {
+          event.preventDefault();
+          const isOpen = panel.classList.toggle('show');
+          header.classList.toggle('collapsed', !isOpen);
+          header.setAttribute('aria-expanded', String(isOpen));
+        });
+      });
+
+      // ---- "Read More" toggles ---------------------------------------------
+      // Each teaser sits in its own block with the full copy in the next
+      // sibling, hidden inline. The original page wired these to per-button
+      // myFunction1..4 globals that were not carried over, so match on shape.
+      document.querySelectorAll<HTMLButtonElement>('button.theme-btn').forEach((button) => {
+        const intro = button.closest<HTMLElement>('div[id]');
+        const full = intro?.nextElementSibling as HTMLElement | null;
+        if (!intro || !full || full.style.display !== 'none') return;
+
+        button.setAttribute('aria-expanded', 'false');
+        button.addEventListener('click', () => {
+          full.style.display = 'block';
+          intro.style.display = 'none';
+          button.setAttribute('aria-expanded', 'true');
+          full.setAttribute('tabindex', '-1');
+          full.focus({ preventScroll: true });
+        });
+      });
+
       document.querySelectorAll<HTMLElement>('ul.tile-grid').forEach((grid) => {
         if (grid.querySelector('figcaption')) return;
         const slides = grid.children.length;
@@ -276,19 +351,78 @@ const { title, description } = Astro.props;
           return first ? first.getBoundingClientRect().width + 20 : grid.clientWidth;
         };
 
-        const sync = () => {
-          const max = grid.scrollWidth - grid.clientWidth - 1;
-          prev.disabled = grid.scrollLeft <= 0;
-          next.disabled = grid.scrollLeft >= max;
+        // The ceremony strips ran as a continuous right-to-left marquee. Clone
+        // the tiles once so the scroll can wrap without a visible seam: at the
+        // halfway mark the position rolls back by one copy's width, which is
+        // pixel-identical to where it was.
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+        Array.from(grid.children).forEach((tile) => {
+          const clone = tile.cloneNode(true) as HTMLElement;
+          clone.setAttribute('aria-hidden', 'true');
+          clone.querySelectorAll('a, button').forEach((el) => el.setAttribute('tabindex', '-1'));
+          grid.appendChild(clone);
+        });
+
+        const lap = () => grid.scrollWidth / 2;
+        const wrap = () => {
+          if (grid.scrollLeft >= lap()) grid.scrollLeft -= lap();
+          else if (grid.scrollLeft < 0) grid.scrollLeft += lap();
         };
 
-        prev.addEventListener('click', () => grid.scrollBy({ left: -step(), behavior: 'smooth' }));
-        next.addEventListener('click', () => grid.scrollBy({ left: step(), behavior: 'smooth' }));
-        grid.addEventListener('scroll', sync, { passive: true });
-        window.addEventListener('resize', sync);
-        // Panels start collapsed, so measure once they are actually laid out.
-        new ResizeObserver(sync).observe(grid);
-        sync();
+        // Arrows jump a whole tile rather than animating, so a click never
+        // fights the frame loop for control of scrollLeft.
+        prev.addEventListener('click', () => {
+          grid.scrollLeft -= step();
+          wrap();
+        });
+        next.addEventListener('click', () => {
+          grid.scrollLeft += step();
+          wrap();
+        });
+        window.addEventListener('resize', wrap);
+
+        if (reduced.matches) return;
+
+        // ~40px a second, paused while someone is hovering, tabbing through or
+        // touching the strip, and while the year panel is collapsed or off screen.
+        const SPEED = 40;
+        let frame = 0;
+        let last = 0;
+        let paused = false;
+
+        const tick = (now: number) => {
+          const delta = last ? (now - last) / 1000 : 0;
+          last = now;
+          if (!paused && delta < 0.5) {
+            grid.scrollLeft += SPEED * delta;
+            wrap();
+          }
+          frame = requestAnimationFrame(tick);
+        };
+
+        const play = () => {
+          paused = false;
+          last = 0;
+          if (!frame) frame = requestAnimationFrame(tick);
+        };
+        const pause = () => {
+          paused = true;
+        };
+        const stop = () => {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        };
+
+        carousel.addEventListener('mouseenter', pause);
+        carousel.addEventListener('mouseleave', play);
+        carousel.addEventListener('focusin', pause);
+        carousel.addEventListener('focusout', play);
+        carousel.addEventListener('touchstart', pause, { passive: true });
+        carousel.addEventListener('touchend', play, { passive: true });
+        new IntersectionObserver(
+          ([entry]) => (entry.isIntersecting ? play() : stop()),
+          { threshold: 0 }
+        ).observe(carousel);
       });
     </script>
   </body>
