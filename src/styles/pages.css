@@ -537,6 +537,18 @@ iframe[src*="youtu.be"] {
   border: 0;
 }
 
+/* Some year blocks wrap their gallery in a bare <div> (2023 and 2022 Glimpses
+   and Nominee Meet, 2020 Glimpses) while others drop the <ul> straight into the
+   .row. A classless flex child sizes to its content, so those strips laid out
+   differently from the 2026 ones. Make the wrapper behave like a full-width
+   column, and let it shrink so the strip can scroll inside it. */
+.row > div:not([class]) {
+  flex: 0 0 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.gallery-carousel { min-width: 0; }
+
 /* photo carousels (glimpses, nominee meet, council meet, ...) */
 .gallery-carousel { position: relative; }
 .gallery-carousel .tile-grid {
@@ -550,9 +562,9 @@ iframe[src*="youtu.be"] {
 }
 .gallery-carousel .tile-grid::-webkit-scrollbar { display: none; }
 .gallery-carousel .tile-grid > li {
-  /* four ceremony photos in view, each capped at the 300 x 200 tile */
-  flex: 0 0 calc((100% - 60px) / 4);
-  max-width: 300px;
+  /* three ceremony photos in view, filling the row (two 20px gaps) */
+  flex: 0 0 calc((100% - 40px) / 3);
+  max-width: none;
 }
 .gallery-carousel .tile-grid img {
   width: 100%;

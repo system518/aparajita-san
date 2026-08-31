@@ -86,6 +86,25 @@ const { title, description } = Astro.props;
           button.classList.toggle('collapsed', !isOpen);
           if (isOpen) playVideos();
           else stopVideos();
+
+          // One year at a time, as data-bs-parent did on the original: with
+          // several panels open the one you just clicked can be pages below the
+          // fold, which reads as "nothing happened".
+          if (isOpen) {
+            document.dispatchEvent(
+              new CustomEvent('accordion:opened', { detail: { panel, button } })
+            );
+            button.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          }
+        });
+
+        document.addEventListener('accordion:opened', (event) => {
+          const detail = (event as CustomEvent<{ panel: HTMLElement }>).detail;
+          if (detail.panel === panel || !panel.classList.contains('show')) return;
+          panel.classList.remove('show');
+          button.setAttribute('aria-expanded', 'false');
+          button.classList.add('collapsed');
+          stopVideos();
         });
       });
     </script>
@@ -364,22 +383,30 @@ const { title, description } = Astro.props;
         });
 
         const lap = () => grid.scrollWidth / 2;
-        const wrap = () => {
-          if (grid.scrollLeft >= lap()) grid.scrollLeft -= lap();
-          else if (grid.scrollLeft < 0) grid.scrollLeft += lap();
+
+        // The drift is sub-pixel per frame (~0.7px at 60Hz). Reading scrollLeft
+        // back and adding to it loses that fraction to rounding every frame and
+        // the strip never moves, so keep the true position here and only ever
+        // write it out.
+        let position = grid.scrollLeft;
+        const place = () => {
+          const size = lap();
+          if (size > 0) {
+            if (position >= size) position -= size;
+            else if (position < 0) position += size;
+          }
+          grid.scrollLeft = position;
+        };
+        const nudge = (by: number) => {
+          position = grid.scrollLeft + by;
+          place();
         };
 
         // Arrows jump a whole tile rather than animating, so a click never
         // fights the frame loop for control of scrollLeft.
-        prev.addEventListener('click', () => {
-          grid.scrollLeft -= step();
-          wrap();
-        });
-        next.addEventListener('click', () => {
-          grid.scrollLeft += step();
-          wrap();
-        });
-        window.addEventListener('resize', wrap);
+        prev.addEventListener('click', () => nudge(-step()));
+        next.addEventListener('click', () => nudge(step()));
+        window.addEventListener('resize', () => nudge(0));
 
         if (reduced.matches) return;
 
@@ -393,9 +420,11 @@ const { title, description } = Astro.props;
         const tick = (now: number) => {
           const delta = last ? (now - last) / 1000 : 0;
           last = now;
-          if (!paused && delta < 0.5) {
-            grid.scrollLeft += SPEED * delta;
-            wrap();
+          // Nothing to scroll yet while the panel is collapsed or the lazy
+          // images have no size; keep ticking until there is.
+          if (!paused && delta < 0.5 && lap() > 0) {
+            position += SPEED * delta;
+            place();
           }
           frame = requestAnimationFrame(tick);
         };
@@ -412,6 +441,14 @@ const { title, description } = Astro.props;
           cancelAnimationFrame(frame);
           frame = 0;
         };
+
+        grid.addEventListener(
+          'scroll',
+          () => {
+            if (paused) position = grid.scrollLeft;
+          },
+          { passive: true }
+        );
 
         carousel.addEventListener('mouseenter', pause);
         carousel.addEventListener('mouseleave', play);
