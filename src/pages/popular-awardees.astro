@@ -8,20 +8,20 @@ import Base from '../layouts/Base.astro';
     <h2 class="apj-title">Popular Award 2026 &#8211; Nominees</h2>
   </div>
   <div class="apj-filterbar">
-    <button type="button" class="apj-fbtn apj-active">
+    <button type="button" class="apj-fbtn apj-active" data-filter="all">
       All
     </button>
-    <button type="button" class="apj-fbtn">
+    <button type="button" class="apj-fbtn" data-filter="health">
       Health &amp; Wellness
     </button>
-    <button type="button" class="apj-fbtn">Sports</button>
-    <button type="button" class="apj-fbtn">Nishtha</button>
-    <button type="button" class="apj-fbtn">
+    <button type="button" class="apj-fbtn" data-filter="sports">Sports</button>
+    <button type="button" class="apj-fbtn" data-filter="nistha">Nishtha</button>
+    <button type="button" class="apj-fbtn" data-filter="business">
       Business &amp; Entrepreneurship
     </button>
   </div>
   <div class="apj-grid">
-    <div class="apj-story">
+    <div class="apj-story" data-category="health" data-audio-en="/audio/b.mp3">
       <div class="apj-media">
         <img src="/images/b-scaled.webp" alt="Health worker with stethoscope">
         <span class="apj-tag">Health &amp; Wellness</span>
@@ -90,7 +90,7 @@ import Base from '../layouts/Base.astro';
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -100,7 +100,7 @@ import Base from '../layouts/Base.astro';
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="health" data-audio-en="/audio/p.mp3">
       <div class="apj-media">
         <img src="/images/p.webp" alt="Health worker with stethoscope">
         <span class="apj-tag">Health &amp; Wellness</span>
@@ -167,7 +167,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -177,7 +177,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="health" data-audio-en="/audio/s.mp3">
       <div class="apj-media">
         <img src="/images/s-1-scaled.webp" alt="Health worker with stethoscope">
         <span class="apj-tag">Health &amp; Wellness</span>
@@ -241,7 +241,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -251,7 +251,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="sports" data-audio-en="/audio/KOYEL-RAJ.mp3">
       <div class="apj-media">
         <img src="/images/Koyel-scaled.webp" alt="Koyel Raj">
         <span class="apj-tag">Sports</span>
@@ -312,7 +312,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -322,7 +322,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="sports" data-audio-en="/audio/RUBIA-CHATERJEE.mp3">
       <div class="apj-media">
         <img src="/images/Rubia-scaled.webp" alt="Rubia Chatterjee">
         <span class="apj-tag">Sports</span>
@@ -385,7 +385,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -395,7 +395,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="sports" data-audio-en="/audio/SANGITA-METYA.mp3">
       <div class="apj-media">
         <img src="/images/Sangita-scaled.webp" alt="Sangita Metya">
         <span class="apj-tag">Sports</span>
@@ -448,7 +448,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -458,7 +458,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="nistha" data-audio-en="/audio/CHANDRAMANI.mp3">
       <div class="apj-media">
         <img src="/images/c-scaled.webp" alt="Chandramani Agarwalla">
         <span class="apj-tag">Nishtha</span>
@@ -526,7 +526,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -536,7 +536,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="nistha" data-audio-en="/audio/SASWATI-MUKERJI.mp3">
       <div class="apj-media">
         <img src="/images/s-scaled.webp" alt="Saswati Mukerji">
         <span class="apj-tag">Nishtha</span>
@@ -603,7 +603,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -613,7 +613,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="nistha" data-audio-en="/audio/URMILA-SHOBHA-KANOI.mp3">
       <div class="apj-media">
         <img src="/images/us-scaled.webp" alt="Urmila Pasari &amp; Shobha Kanoi">
         <span class="apj-tag">Nistha</span>
@@ -678,7 +678,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -688,7 +688,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="business" data-audio-en="/audio/Astha.mp3">
       <div class="apj-media">
         <img src="/images/AASTHA-1.webp" alt="Aastha">
         <span class="apj-tag">Business &amp; Entrepreneurship</span>
@@ -753,7 +753,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio </span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -763,7 +763,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="business" data-audio-en="/audio/Akanksha.mp3">
       <div class="apj-media">
         <img src="/images/Akansha-1-scaled.webp" alt="Akanksha">
         <span class="apj-tag">Business &amp; Entrepreneurship</span>
@@ -834,7 +834,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -844,7 +844,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
       </div>
     </div>
-    <div class="apj-story">
+    <div class="apj-story" data-category="business" data-audio-en="/audio/Khushboo.mp3">
       <div class="apj-media">
         <img src="/images/khushboo-1.webp" alt="Khushboo Khosla Gupta">
         <span class="apj-tag">Business &amp; Entrepreneurship</span>
@@ -922,7 +922,7 @@ Professor of Psychiatry, Calcutta National Medical College.
         </div>
         <div class="apj-voice">
           <span class="apj-vlabel">Nominee journey Audio</span>
-          <div class="apj-player">
+          <div class="apj-player" data-lang="en">
             <button type="button" class="apj-play" aria-label="Play English voice message">
               ▶
             </button>
@@ -935,4 +935,112 @@ Professor of Psychiatry, Calcutta National Medical College.
     <p class="apj-empty apj-hide">No stories in this category yet.</p>
   </div>
 </div>
+<script>
+  // Category filter + per-card audio player, ported from the live page.
+  const root = document.getElementById('apj-stories');
+  if (root) {
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('.apj-fbtn'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('.apj-story'));
+    const empty = root.querySelector<HTMLElement>('.apj-empty');
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((other) => other.classList.toggle('apj-active', other === button));
+        const filter = button.dataset.filter;
+        let visible = 0;
+        cards.forEach((card) => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.classList.toggle('apj-hide', !show);
+          if (show) visible += 1;
+        });
+        empty?.classList.toggle('apj-hide', visible > 0);
+      });
+    });
+
+    const clock = (seconds: number) => {
+      if (!isFinite(seconds)) return '0:00';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    };
+
+    // Only one nominee plays at a time.
+    let playing: { audio: HTMLAudioElement; button: HTMLElement; player: HTMLElement } | null = null;
+
+    root.querySelectorAll<HTMLElement>('.apj-player').forEach((player) => {
+      const card = player.closest<HTMLElement>('.apj-story');
+      const button = player.querySelector<HTMLButtonElement>('.apj-play');
+      const fill = player.querySelector<HTMLElement>('.apj-fill');
+      const track = player.querySelector<HTMLElement>('.apj-track');
+      const time = player.querySelector<HTMLElement>('.apj-time');
+      if (!card || !button || !fill || !track || !time) return;
+
+      const src = player.dataset.lang === 'hi' ? card.dataset.audioHi : card.dataset.audioEn;
+      if (!src) {
+        player.classList.add('apj-nofile');
+        time.textContent = 'audio not found';
+        return;
+      }
+
+      const audio = new Audio();
+      audio.preload = 'metadata';
+      audio.src = src;
+      const self = { audio, button, player };
+
+      const stop = (reset: boolean) => {
+        audio.pause();
+        if (reset) {
+          audio.currentTime = 0;
+          fill.style.width = '0%';
+        }
+        button.innerHTML = '▶';
+        player.classList.remove('apj-playing');
+        if (playing?.audio === audio) playing = null;
+      };
+
+      audio.addEventListener('loadedmetadata', () => {
+        time.textContent = `0:00 / ${clock(audio.duration)}`;
+      });
+      audio.addEventListener('timeupdate', () => {
+        if (!audio.duration) return;
+        fill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        time.textContent = `${clock(audio.currentTime)} / ${clock(audio.duration)}`;
+      });
+      audio.addEventListener('ended', () => stop(true));
+      audio.addEventListener('error', () => {
+        player.classList.add('apj-nofile');
+        time.textContent = 'audio not found';
+      });
+
+      track.addEventListener('click', (event) => {
+        if (!audio.duration) return;
+        const rect = track.getBoundingClientRect();
+        audio.currentTime = ((event.clientX - rect.left) / rect.width) * audio.duration;
+      });
+
+      button.addEventListener('click', () => {
+        if (!audio.paused) {
+          stop(false);
+          return;
+        }
+        if (playing && playing.audio !== audio) {
+          playing.audio.pause();
+          playing.button.innerHTML = '▶';
+          playing.player.classList.remove('apj-playing');
+        }
+        audio
+          .play()
+          .then(() => {
+            playing = self;
+            button.innerHTML = '❚❚';
+            player.classList.add('apj-playing');
+          })
+          .catch(() => {
+            player.classList.add('apj-nofile');
+            time.textContent = 'audio not found';
+          });
+      });
+    });
+  }
+</script>
 </Base>

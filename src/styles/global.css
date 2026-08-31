@@ -37,6 +37,60 @@
   font-display: swap;
 }
 
+/* The Seasons is licensed here as a Fontspring DEMO cut, and demo cuts replace
+   the punctuation AND some of the digit glyphs with the word "DEMO" -- so a
+   period, a comma or a numeral in a display heading rendered as that word.
+   These faces re-point punctuation and all ten digits at Helvetica, which ships with the site, so the
+   headings keep the display letterforms and the punctuation renders normally.
+   Helvetica rather than a local() serif because local() depends on what the
+   visitor's machine happens to have installed, and a miss falls straight back
+   to the demo glyph. The weights below mirror the faces above one for one, and
+   this block MUST stay after them: within one family, when two faces match a
+   codepoint equally well, the one declared last wins. Delete the whole block
+   once the full font is licensed and the demo files above are swapped out. */
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/Helvetica.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+  unicode-range: U+0021-0040, U+005B-0060, U+007B-007E,
+    U+00A1-00BF, U+2010-201F, U+2020-2027, U+2030-205E;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/Helvetica.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0021-0040, U+005B-0060, U+007B-007E,
+    U+00A1-00BF, U+2010-201F, U+2020-2027, U+2030-205E;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/Helvetica-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0021-0040, U+005B-0060, U+007B-007E,
+    U+00A1-00BF, U+2010-201F, U+2020-2027, U+2030-205E;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/Helvetica.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0021-0040, U+005B-0060, U+007B-007E,
+    U+00A1-00BF, U+2010-201F, U+2020-2027, U+2030-205E;
+}
+@font-face {
+  font-family: 'The Seasons';
+  src: url('/fonts/Helvetica.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0021-0040, U+005B-0060, U+007B-007E,
+    U+00A1-00BF, U+2010-201F, U+2020-2027, U+2030-205E;
+}
+
 :root {
   --color-default: #161616;
   --color-primary: #262c30;
@@ -142,9 +196,6 @@ p {
   gap: 8%;
   align-items: center;
 }
-
-.down-arrow { display: block; margin: 40px auto 0; width: 16px; }
-.down-arrow img { width: 100%; display: block; }
 
 @media (max-width: 991px) {
   .content-gap { padding-block: 64px; }

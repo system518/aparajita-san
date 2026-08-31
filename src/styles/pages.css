@@ -13,6 +13,24 @@
   width: 100%;
 }
 
+/* Bootstrap cancels a row's negative margin with the padding of the column it
+   sits in. Some ported sections nest a .row straight inside another .row with
+   no column between, so the margins stacked and that content sat 12px left of
+   the rest of the page. */
+.row > .row {
+  flex: 0 0 100%;
+  max-width: 100%;
+  margin-inline: 0;
+}
+/* Ported sections also drop a bare .container or <section> straight into a
+   .row. As flex items with no col-* width they shrank to fit and lined up
+   side by side, so give them a full line too. */
+.row > .container,
+.row > section {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
 .col-12, .col-sm-12 { flex: 0 0 100%; max-width: 100%; }
 .col-6 { flex: 0 0 50%; max-width: 50%; }
 .col-4 { flex: 0 0 33.333%; max-width: 33.333%; }
@@ -314,10 +332,12 @@ hr { border: 0; border-top: 1px solid rgba(0,0,0,0.12); width: 100%; margin: 28p
 .accordion { max-width: 1000px; margin-inline: auto; }
 .accordion-item { border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 .accordion-header { margin: 0; }
+.accordion-header.text-center { text-align: left; }
 .accordion-button {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  text-align: left;
   gap: 14px;
   width: 100%;
   padding: 18px 12px;
@@ -331,6 +351,7 @@ hr { border: 0; border-top: 1px solid rgba(0,0,0,0.12); width: 100%; margin: 28p
 .accordion-button h3 { margin: 0 !important; font-size: 30px; }
 .accordion-button::after {
   content: '';
+  margin-left: auto;
   width: 10px;
   height: 10px;
   border-right: 2px solid var(--color-secondary);
@@ -398,6 +419,114 @@ hr { border: 0; border-top: 1px solid rgba(0,0,0,0.12); width: 100%; margin: 28p
 /* ── CMS admin ──────────────────────────────────────────────────────── */
 .admin-h1 { font-size: 36px; font-weight: 400; margin: 0; }
 .admin-bar {
+/* awardee / nominee cards (archives, awardee listings) */
+.name {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  line-height: 1.25;
+  margin: 12px 0 4px;
+  color: var(--color-primary);
+}
+.deg {
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  color: #6a7276;
+  margin: 0;
+}
+.fix-height { min-height: 52px; }
+.company,
+.category {
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-style: italic;
+  color: var(--color-secondary);
+  margin: 6px 0 0;
+}
+.view-profile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 8px;
+  border: 1px solid var(--color-secondary);
+  border-radius: 50%;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.view-profile:hover,
+.view-profile:focus-visible {
+  background: var(--color-secondary);
+  color: #fff;
+}
+.counsel-member { margin-bottom: 30px; }
+.photo-gallery { overflow: hidden; }
+.quote-name {
+  font-family: var(--font-secondary);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: #6a7276;
+}
+.subhdr-gap { margin-bottom: 24px; }
+.mob-gap { margin-top: 0; }
+.my-4 { margin-block: 1.5rem; }
+.hidden { display: none !important; }
+
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.btn-secondary {
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+  font-size: 16px;
+  color: #6a7276;
+}
+.btn-secondary:hover { color: var(--color-secondary); }
+
+.form-control {
+  font: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: #fff;
+  width: 100%;
+}
+
+/* profile modals */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  overflow-y: auto;
+  background: rgba(22, 22, 22, 0.55);
+  padding: 24px 12px;
+}
+.modal.show { display: block; }
+.modal-dialog {
+  max-width: 500px;
+  margin-inline: auto;
+}
+.modal-lg { max-width: 800px; }
+.modal-dialog-centered { min-height: calc(100% - 48px); display: flex; align-items: center; }
+.modal-content {
+  background: #fff;
+  width: 100%;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+}
+.modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -445,4 +574,1067 @@ hr { border: 0; border-top: 1px solid rgba(0,0,0,0.12); width: 100%; margin: 28p
   .admin-table tr { display: block; padding: 12px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
   .admin-table td { display: block; border: 0; padding: 4px 0; }
   .admin-row-actions { justify-content: flex-start; }
+  padding: 20px 26px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.modal-title {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  color: var(--color-secondary);
+  margin: 0;
+}
+.modal-body { padding: 22px 26px 28px; }
+.modal-body p { margin: 0 0 14px; font-size: 16px; line-height: 1.7; }
+.modal-body p:last-child { margin-bottom: 0; }
+body.modal-open { overflow: hidden; }
+
+@media (max-width: 991px) {
+  .fix-height { min-height: 0; }
+  .mob-gap { margin-top: 24px; }
+  .modal-title { font-size: 20px; }
+}
+
+
+/* "Read More" / call-to-action buttons. The original theme paints these with
+   a brush-stroke PNG, desaturated until hover; keep that, and reset the native
+   <button> chrome since the markup uses both <button> and <a>. */
+.theme-btn {
+  display: inline-block;
+  padding: 19px 38px;
+  border: 0;
+  background: url('/images/button-bg.webp') no-repeat center center;
+  background-size: contain;
+  font-family: var(--font-secondary);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  color: #222;
+  margin-top: 10px;
+  cursor: pointer;
+  filter: grayscale(100%);
+  transition: filter 0.4s ease-in-out, color 0.4s ease-in-out;
+}
+.theme-btn-light,
+.theme-btn-dark { color: #fff; }
+.theme-btn:hover,
+.theme-btn:focus-visible { color: #fff; filter: none; }
+.theme-btn.view-profile { font-size: 14px; padding: 10px 20px; }
+
+/* video embeds — the ported markup carries per-block width/height attributes
+   (100% x 550 here, 100% x 350 elsewhere), so pin every YouTube frame to one
+   fixed 16:9 box and centre it in whatever column it sits in. */
+iframe[src*="youtube.com"],
+iframe[src*="youtu.be"] {
+  display: block;
+  width: 500px;
+  max-width: 100%;
+  height: 280px;
+  margin: 0 auto;
+  border: 0;
+}
+
+/* Some year blocks wrap their gallery in a bare <div> (2023 and 2022 Glimpses
+   and Nominee Meet, 2020 Glimpses) while others drop the <ul> straight into the
+   .row. A classless flex child sizes to its content, so those strips laid out
+   differently from the 2026 ones. Make the wrapper behave like a full-width
+   column, and let it shrink so the strip can scroll inside it. */
+.row > div:not([class]) {
+  flex: 0 0 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.gallery-carousel { min-width: 0; }
+
+/* photo carousels (glimpses, nominee meet, council meet, ...) */
+.gallery-carousel { position: relative; }
+.gallery-carousel .tile-grid {
+  display: flex;
+  grid-template-columns: none;
+  overflow-x: auto;
+  /* the strip is driven frame by frame, so no snapping or smooth easing */
+  scroll-snap-type: none;
+  scrollbar-width: none;
+  gap: 20px;
+}
+.gallery-carousel .tile-grid::-webkit-scrollbar { display: none; }
+.gallery-carousel .tile-grid > li {
+  /* three ceremony photos in view, filling the row (two 20px gaps) */
+  flex: 0 0 calc((100% - 40px) / 3);
+  max-width: none;
+}
+.gallery-carousel .tile-grid img {
+  width: 100%;
+  height: 200px;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-nav::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid var(--color-primary);
+  border-right: 2px solid var(--color-primary);
+}
+.gallery-nav.prev { left: -12px; }
+.gallery-nav.prev::before { transform: rotate(-135deg) translate(-2px, -2px); }
+.gallery-nav.next { right: -12px; }
+.gallery-nav.next::before { transform: rotate(45deg) translate(-2px, 2px); }
+.gallery-nav[disabled] { opacity: 0.3; cursor: default; }
+.gallery-nav:not([disabled]):hover { background: #fff; }
+
+/* footprints galleries: one photo in view at a time, same right-to-left run */
+.gallery-carousel .tile-grid.tile-grid-single > li {
+  flex: 0 0 100%;
+  max-width: none;
+}
+.gallery-carousel .tile-grid.tile-grid-single img {
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+}
+
+@media (max-width: 991px) {
+  .gallery-carousel .tile-grid > li { flex: 0 0 calc((100% - 20px) / 2); }
+  .gallery-carousel .tile-grid.tile-grid-single > li { flex: 0 0 100%; }
+  .gallery-carousel .tile-grid.tile-grid-single img { height: 260px; }
+  .gallery-nav.prev { left: 0; }
+  .gallery-nav.next { right: 0; }
+}
+@media (max-width: 575px) {
+  .gallery-carousel .tile-grid > li { flex: 0 0 100%; }
+}
+
+/* ---- The Aparajita Institution page -------------------------------------
+   This page was ported with its own apj-* markup rather than the .container
+   grid the other pages use, so it needs its own width + rhythm. */
+#apj-page {
+  --apj-ink-soft: #6a7276;
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 36px;
+  padding-block: 40px 20px;
+}
+
+.apj-kicker {
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  margin-bottom: 0.6rem;
+}
+.apj-h1 {
+  font-size: 56px;
+  font-weight: 400;
+  margin: 0 0 50px;
+}
+.apj-h2 {
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--color-secondary);
+  margin: 0 0 30px;
+}
+
+/* letter: portrait on the left, the letter it belongs to on the right */
+.apj-letter {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 2fr);
+  gap: var(--gutter);
+  align-items: start;
+  margin-bottom: 70px;
+}
+.apj-letter-text { order: 2; }
+.apj-letter-text p { margin-bottom: 1.4rem; }
+.apj-em {
+  font-family: var(--font-primary);
+  font-size: 22px;
+  line-height: 1.6em;
+  color: var(--color-secondary);
+}
+.apj-hi { font-family: var(--font-hindi); }
+.apj-letter-photo { order: 1; max-width: 300px; }
+.apj-letter-photo img {
+  display: block !important;
+  width: 100% !important;
+  max-height: 380px !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  max-width: none !important;
+  border: none !important;
+}
+
+.apj-sign { margin-top: 40px; }
+.apj-sign p { margin-bottom: 0; }
+.apj-sign-name {
+  font-family: var(--font-primary);
+  font-size: 26px;
+  line-height: 1.2em;
+}
+.apj-sign-role {
+  font-size: 15px;
+  line-height: 1.5em;
+  color: var(--apj-ink-soft);
+}
+
+.apj-inst { max-width: 900px; }
+
+#apj-page .tile-grid img { aspect-ratio: 4 / 3; }
+
+.apj-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  margin: 40px 0 45px;
+  border-block: 1px solid #e3e5e6;
+  padding-block: 35px;
+}
+.apj-stat-num {
+  font-family: var(--font-primary);
+  font-size: 40px;
+  line-height: 1.1em;
+  color: var(--color-secondary);
+  margin-bottom: 8px;
+}
+.apj-stat-label {
+  font-size: 15px;
+  line-height: 1.4em;
+  color: var(--apj-ink-soft);
+  margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+  #apj-page { padding-inline: 20px; }
+  .apj-h1 { font-size: 38px; margin-bottom: 35px; }
+  .apj-h2 { font-size: 28px; }
+  .apj-letter {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 35px;
+    margin-bottom: 50px;
+  }
+  .apj-letter-photo { max-width: 380px; }
+  .apj-stats { grid-template-columns: minmax(0, 1fr); gap: 25px; }
+  .apj-stat-num { font-size: 32px; }
+}
+
+
+/* Section titles: .sec-header had no styles at all, so its h2 fell back to the
+   browser default size. The italic <span> highlight comes from the base
+   h2 span rule. */
+.sec-header h2 {
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 1.2em;
+  margin: 0;
+}
+.sec-header h3 { font-size: 20px; margin: 6px 0 0; }
+
+@media (max-width: 991px) {
+  .sec-header h2 { font-size: 30px; }
+}
+
+/* ---- Akaar "Featured Stories" card carousel ------------------------------
+   Ported with its own slider_div / slide_track markup and no styles, so the
+   cards stacked full width. Same scroll-snap + .gallery-nav treatment as the
+   photo grids, but sized for a card with an image and a body of text. */
+.slider_div {
+  position: relative;
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 36px;
+}
+.slide_track {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-block: 10px;
+}
+.slide_track::-webkit-scrollbar { display: none; }
+.slide-image {
+  flex: 0 0 calc((100% - 60px) / 3);
+  scroll-snap-align: start;
+}
+
+.slide-image .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border: 1px solid #e3e5e6;
+  overflow: hidden;
+}
+.slide-image .card-image img {
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  object-fit: cover;
+  display: block;
+  margin: 28px auto 0;
+}
+.slide-image .card-text { padding: 20px 24px 28px; text-align: center; }
+.slide-image .card-text #name p {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  line-height: 1.2em;
+  margin-bottom: 0;
+}
+/* the ported markup puts a <br> after every name; the padding handles it */
+.slide-image .card-text #name br { display: none; }
+.slide-image .card-text > p {
+  font-size: 15px;
+  line-height: 1.6em;
+  margin: 14px 0 0;
+}
+
+.slider_div .gallery-nav.prev { left: 0; }
+.slider_div .gallery-nav.next { right: 0; }
+
+@media (max-width: 991px) {
+  .slider_div { padding-inline: 20px; }
+  .slide-image { flex: 0 0 calc((100% - 30px) / 2); }
+}
+@media (max-width: 575px) {
+  .slide-image { flex: 0 0 100%; }
+}
+
+
+/* ---- body copy lists -----------------------------------------------------
+   Ported lists wrap every item in a <p>, whose 1.4rem bottom margin opened a
+   full blank line between bullets. Keep the paragraph rhythm between list
+   items modest, and pull the markers in so they line up with the text column
+   rather than sitting 40px out on the browser default indent. */
+.founder-area ul,
+.container ul:not([class]) {
+  margin: 0 0 1.4rem;
+  padding-left: 1.2em;
+}
+.founder-area ul > li,
+.container ul:not([class]) > li {
+  margin-bottom: 0.35rem;
+}
+/* the <p> inside each item carries the site-wide 1.4rem bottom margin, which
+   opened a full blank line between bullets */
+li > p:last-child { margin-bottom: 0; }
+
+/* ---- Popular Awardees story cards --------------------------------------
+   Ported from the live page's inline <style>, which is scoped to
+   #apj-stories and carries its own reset and !important guards against the
+   old theme's button rules. Kept as-is apart from the font stacks, which now
+   point at this project's tokens. */
+/* ---------- Scoped reset: protects against theme CSS ---------- */
+#apj-stories,
+#apj-stories *,
+#apj-stories *::before,
+#apj-stories *::after {
+  box-sizing: border-box !important;
+  margin: 0;
+  padding: 0;
+}
+#apj-stories {
+  --apj-red: #d64550;
+  --apj-red-deep: #b93540;
+  --apj-red-soft: #f6b8bd;
+  --apj-paper: #efede6;
+  --apj-card: #faf9f5;
+  --apj-ink: #221f1d;
+  --apj-ink-soft: #5c5751;
+  --apj-line: #d8d4c9;
+  --apj-leaf: #8a8f7c;
+  --apj-serif:
+    var(--font-primary);
+  --apj-sans: var(--font-secondary);
+  /* Akhand Devanagari is a display face; Hindi body copy needs a text face,
+     so fall through the Devanagari fonts Windows/macOS ship before it. */
+  --apj-hindi:
+    'Noto Sans Devanagari', 'Nirmala UI', 'Mangal', 'Kohinoor Devanagari',
+    var(--font-hindi), sans-serif;
+  display: block;
+  font-family: var(--apj-sans);
+  color: var(--apj-ink);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 10px 70px;
+  line-height: 1.5;
+}
+/* ---------- Heading ---------- */
+#apj-stories .apj-head {
+  margin-bottom: 34px;
+  padding-left: 60px;
+}
+#apj-stories .apj-kicker {
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--apj-red);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+#apj-stories {
+  font-family: var(--apj-serif);
+  font-weight: 500;
+  font-size: clamp(34px, 5vw, 56px);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  color: var(--apj-ink);
+}
+#apj-stories em {
+  font-style: italic;
+  color: var(--apj-red-deep);
+}
+#apj-stories .apj-sub {
+  margin-top: 12px;
+  max-width: 540px;
+  color: var(--apj-ink-soft);
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+#apj-stories .apj-hi {
+  font-family: var(--apj-hindi);
+}
+/* ---------- Filter bar (hardened against theme button styles) ---------- */
+#apj-stories .apj-filterbar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px;
+  padding: 0 0 26px;
+  border-bottom: 1px solid var(--apj-line);
+  margin-bottom: 38px;
+}
+#apj-stories .apj-fbtn {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+  font-family: var(--apj-sans) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1.4 !important;
+  padding: 9px 20px !important;
+  background: transparent !important;
+  color: var(--apj-ink) !important;
+  border: 1px solid var(--apj-ink) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+#apj-stories .apj-fbtn:hover {
+  border-color: var(--apj-red) !important;
+  color: var(--apj-red-deep) !important;
+  background: transparent !important;
+  transform: translateY(-1px);
+}
+#apj-stories .apj-fbtn:focus-visible {
+  outline: 2px solid var(--apj-red);
+  outline-offset: 3px;
+}
+#apj-stories .apj-fbtn.apj-active {
+  background: var(--apj-red) !important;
+  border-color: var(--apj-red) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(214, 69, 80, 0.32) !important;
+}
+#apj-stories .apj-fbtn .apj-hi {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-left: 6px;
+}
+/* ---------- Card grid ---------- */
+#apj-stories .apj-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)) !important;
+  gap: 28px !important;
+  list-style: none !important;
+}
+
+#apj-stories .apj-en ul,
+#apj-stories .apj-hindi-text ul {
+  list-style: disc !important;
+  padding-left: 20px !important;
+  margin: 0 !important;
+}
+#apj-stories .apj-en li,
+#apj-stories .apj-hindi-text li {
+  display: list-item !important;
+  margin: 0 0 8px 0 !important;
+  font-size: 13px !important;
+}
+#apj-stories .apj-en li::marker,
+#apj-stories .apj-hindi-text li::marker {
+  color: var(--apj-red);
+}
+#apj-stories .apj-story {
+  /* background:var(--apj-card); */
+  background: transparent !important;
+  border: 1px solid var(--apj-line);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column !important;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  animation: apjIn 0.4s ease both;
+}
+@keyframes apjIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+#apj-stories .apj-story:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(34, 31, 29, 0.12);
+}
+#apj-stories .apj-story.apj-hide {
+  display: none !important;
+}
+#apj-stories .apj-media {
+  position: relative;
+  overflow: hidden;
+  padding: 48px 18px 0 !important;
+}
+#apj-stories .apj-media img {
+  display: block !important;
+  width: 75% !important;
+  margin: 0 auto !important;
+  aspect-ratio: 1/1 !important;
+  height: auto !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: center 20% !important;
+  border: none !important;
+  border-radius: 10px !important;
+  transition: transform 0.5s ease;
+}
+  .apj-title {
+      /* The live page leaves size and face to the old theme's h2; this port has
+         no theme, so state them: the site's section-heading scale in the brand
+         serif. */
+      font-family: var(--apj-serif);
+      font-size: 36px;
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 0.01em;
+      color: #161616;
+    }
+
+#apj-stories .apj-story:hover .apj-media img {
+  transform: scale(1.05);
+}
+#apj-stories .apj-tag {
+  position: absolute;
+  top: 14px;
+  /* left: 4px;
+  top: 14px; */
+  left:12.5%;
+  transform:none;
+  /* transform: translateX(-50%); */
+  white-space: nowrap;
+  background: var(--apj-red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 6px;
+}
+#apj-stories .apj-body {
+  /* padding: 20px 20px 22px;*/
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px;
+  flex: 1; 
+  width: 75%;
+  margin: 0 auto;
+  padding: 20px 0 22px;
+}
+#apj-stories .apj-story-title {
+  font-family: var(--apj-serif);
+  font-weight: 600;
+  font-size: 23px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--apj-ink);
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#apj-stories .apj-en {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--apj-ink-soft);
+}
+#apj-stories .apj-hindi-text {
+  font-family: var(--apj-hindi);
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--apj-ink);
+  border-left: 2px solid var(--apj-red-soft);
+  padding-left: 12px !important;
+}
+/* ---------- Pre-recorded voice players ---------- */
+#apj-stories .apj-voice {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed var(--apj-line);
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 9px;
+}
+#apj-stories .apj-vlabel {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--apj-leaf);
+  font-weight: 600;
+}
+#apj-stories .apj-player {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 10px;
+  background: var(--apj-paper);
+  border: 1px solid var(--apj-line);
+  border-radius: 999px;
+  padding: 5px 14px 5px 5px !important;
+  transition: border-color 0.2s ease;
+}
+#apj-stories .apj-role {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--apj-ink-deep);
+  font-weight: 600;
+  margin-top: -6px !important; /* pulls it close to the name */
+}
+
+#apj-stories .apj-player.apj-playing {
+  border-color: var(--apj-red);
+}
+#apj-stories .apj-play {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  flex: 0 0 34px !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  border-radius: 50% !important;
+  border: none !important;
+  background: var(--apj-red) !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+#apj-stories .apj-play:hover {
+  background: var(--apj-red-deep) !important;
+  transform: scale(1.06);
+}
+#apj-stories .apj-play:focus-visible {
+  outline: 2px solid var(--apj-red);
+  outline-offset: 3px;
+}
+#apj-stories .apj-plang {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  min-width: 46px;
+  color: var(--apj-ink);
+  flex: 0 0 auto;
+}
+#apj-stories .apj-plang .apj-hi {
+  font-size: 13px;
+}
+#apj-stories .apj-track {
+  flex: 1 1 auto !important;
+  height: 5px !important;
+  border-radius: 99px;
+  background: var(--apj-line);
+  position: relative;
+  cursor: pointer;
+  min-width: 40px;
+}
+#apj-stories .apj-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  background: var(--apj-red);
+  border-radius: 99px;
+}
+#apj-stories .apj-time {
+  font-size: 11px;
+  color: var(--apj-ink-soft);
+  min-width: 64px;
+  text-align: right;
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+#apj-stories .apj-player.apj-nofile {
+  opacity: 0.55;
+}
+#apj-stories .apj-player.apj-nofile .apj-time {
+  font-size: 10px;
+}
+#apj-stories .apj-empty {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 60px 0;
+  font-family: var(--apj-serif);
+  font-size: 24px;
+  font-style: italic;
+  color: var(--apj-ink-soft);
+}
+#apj-stories .apj-empty.apj-hide {
+  display: none !important;
+}
+@media (max-width: 1024px) {
+  #apj-stories .apj-head {
+    padding-left: 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #apj-stories * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+@media (max-width: 520px) {
+  #apj-stories {
+    padding: 24px 4px 50px;
+  }
+  #apj-stories .apj-grid {
+    grid-template-columns: 1fr !important;
+  }
+  #apj-stories .apj-head {
+    padding-left: 16px;
+  }
+}
+
+/* Devanagari sits on a lower x-height than Latin at the same px, and these
+   cards mix the two inside one heading, so name the Hindi stack everywhere it
+   appears and give the Hindi lists a little more size and leading. */
+#apj-stories .apj-story-title,
+#apj-stories .apj-role,
+#apj-stories .apj-tag,
+#apj-stories .apj-vlabel {
+  font-family: var(--apj-serif), var(--apj-hindi);
+}
+#apj-stories .apj-hindi-text,
+#apj-stories .apj-hindi-text * {
+  font-family: var(--apj-hindi);
+}
+#apj-stories .apj-hindi-text li {
+  font-size: 14.5px !important;
+  line-height: 1.9 !important;
+  margin-bottom: 10px !important;
+}
+/* keep the live 23px, but Devanagari matras clip at the original 1.2 leading */
+#apj-stories .apj-story-title {
+  font-size: 23px;
+  line-height: 1.45;
+}
+#apj-stories .apj-role {
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  #apj-stories .apj-title { font-size: 28px; }
+}
+
+/* ---- Jury Awardees ------------------------------------------------------
+   The jury page reuses the #apj-stories class names with a different layout
+   (one wide card per row: portrait column, copy column, audio strip). Its
+   inline sheet on the live site would otherwise collide with the popular
+   awardees rules above, so scope it to the page's own .apj-jury class. */
+#apj-stories.apj-jury .apj-head {
+  margin-bottom:34px;
+  padding-left:60px;
+}
+#apj-stories.apj-jury .apj-title {
+  font-weight:600;
+  color:#161616;
+  font-size:xxx-large !important;
+}
+#apj-stories.apj-jury .apj-grid {
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:28px !important;
+  list-style:none !important;
+}
+#apj-stories.apj-jury .apj-story {
+  background:transparent !important;
+  border:1px solid var(--apj-line);
+  border-radius:14px;
+  overflow:hidden;
+  display:grid !important;
+  grid-template-columns:280px 1fr !important;
+  grid-template-areas:
+        "media body"
+        "voice voice" !important;
+  gap:0 28px;
+  transition:transform .3s ease, box-shadow .3s ease;
+  animation:apjIn .4s ease both;
+}
+#apj-stories.apj-jury .apj-media {
+  grid-area:media;
+  position:relative;
+  overflow:visible;
+  padding:24px 0 24px 24px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  gap:14px;
+}
+#apj-stories.apj-jury .apj-media img {
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  aspect-ratio:1/1 !important;
+  height:auto !important;
+  max-width:none !important;
+  object-fit:cover !important;
+  border:none !important;
+  border-radius:10px !important;
+  transition:transform .5s ease;
+}
+#apj-stories.apj-jury .apj-story:hover .apj-media img {
+  transform:scale(1.03);
+}
+#apj-stories.apj-jury .apj-story-title {
+  font-family:var(--apj-serif);
+  font-weight:600;
+  font-size:19px;
+  letter-spacing:.02em;
+  line-height:1.35;
+  color:var(--apj-ink);
+  margin:0 !important;
+  padding:0 !important;
+  text-align:center;
+}
+#apj-stories.apj-jury .apj-role {
+  font-size:12px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--apj-ink-soft);
+  font-weight:600;
+  text-align:center;
+  line-height:1.5;
+  margin-top:-4px !important;
+}
+#apj-stories.apj-jury .apj-body {
+  grid-area:body;
+  padding:24px 24px 22px 0;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:14px;
+}
+#apj-stories.apj-jury .apj-en li,
+#apj-stories.apj-jury .apj-hindi-text li {
+  display:list-item !important;
+  margin:0 0 8px 0 !important;
+}
+#apj-stories.apj-jury .apj-voice {
+  grid-area:voice;
+  margin:0 24px 20px !important;
+  padding-top:14px;
+  border-top:1px dashed var(--apj-line);
+  display:flex !important;
+  flex-direction:column !important;
+  gap:9px;
+}
+#apj-stories.apj-jury .apj-voice audio {
+  width:100% !important;
+  height:40px !important;
+  display:block !important;
+  border-radius:999px;
+  outline:none;
+}
+@media (max-width:1024px) {
+  #apj-stories.apj-jury .apj-head {
+    padding-left:32px;
+  }
+  #apj-stories.apj-jury .apj-story {
+    grid-template-columns:240px 1fr !important;
+  }
+}
+@media (max-width:768px) {
+  #apj-stories.apj-jury .apj-story {
+    grid-template-columns:1fr !important;
+    grid-template-areas:
+            "media"
+            "body"
+            "voice" !important;
+  }
+  #apj-stories.apj-jury .apj-media {
+    padding:24px 24px 0 !important;
+  }
+  #apj-stories.apj-jury .apj-media img {
+    width:70% !important;
+  }
+  #apj-stories.apj-jury .apj-body {
+    padding:18px 24px 0;
+  }
+}
+@media (max-width:520px) {
+  #apj-stories.apj-jury .apj-head {
+    padding-left:16px;
+  }
+  #apj-stories.apj-jury .apj-media img {
+    width:100% !important;
+  }
+}
+
+/* ---- FAQ accordion (Aage Kaun) ------------------------------------------
+   Ported from the easy-accordion plugin sheet plus the page's own inline
+   overrides. The plugin's fontello +/- glyphs are not part of this project,
+   so the icon is drawn in CSS instead. Panels are closed until .show, which
+   the toggle in Base.astro sets. */
+.sp-easy-accordion * { box-sizing: border-box; }
+.sp-easy-accordion p:empty,
+.ea-body p:empty { display: none; }
+.sp-easy-accordion .ea-card { border: none; border-radius: 0; }
+.sp-easy-accordion > .sp-ea-single {
+  background: #eee;
+  margin-bottom: 10px;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+}
+.sp-easy-accordion .ea-header { margin: 0; }
+.sp-easy-accordion .sp-ea-single .ea-header a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  color: #161616;
+  box-shadow: none;
+  outline: none;
+}
+.sp-easy-accordion .sp-ea-single .ea-header a .ea-expand-icon {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  position: relative;
+  color: #444;
+}
+/* + turning into - when the panel is open */
+.sp-easy-accordion .ea-expand-icon::before,
+.sp-easy-accordion .ea-expand-icon::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.sp-easy-accordion .ea-expand-icon::before { top: 7px; left: 0; width: 16px; height: 2px; }
+.sp-easy-accordion .ea-expand-icon::after { top: 0; left: 7px; width: 2px; height: 16px; }
+.sp-easy-accordion .ea-header a:not(.collapsed) .ea-expand-icon::after {
+  transform: rotate(90deg);
+  opacity: 0;
+}
+.sp-easy-accordion .sp-collapse { display: none; }
+.sp-easy-accordion .sp-collapse.show { display: block; }
+.sp-easy-accordion .sp-ea-single .ea-body {
+  padding: 15px;
+  overflow: hidden;
+  background: #eee;
+  color: #161616;
+  border-top: 1px solid #e2e2e2;
+}
+.sp-easy-accordion > .sp-ea-single > .sp-collapse > .ea-body p { margin-bottom: 12px; }
+.sp-easy-accordion .sp-ea-single .ea-body p:last-of-type { padding-bottom: 0; margin-bottom: 0; }
+.sp-easy-accordion > .sp-ea-single > .sp-collapse > .ea-body p:first-of-type { padding-top: 0; margin-top: 0; }
+.sp-easy-accordion audio { width: 100%; }
+
+@media (max-width: 768px) {
+  .sp-easy-accordion .sp-ea-single .ea-header a { font-size: 17px; line-height: 24px; }
+}
+
+/* nomination form: two steps, radio age group, hint text */
+.form-grid .form-step { border: 0; margin: 0; padding: 0; }
+.form-grid .form-step > .form-grid { max-width: none; margin: 0; }
+.form-grid .radio-field { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
+.form-grid .radio-field legend {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5f666a;
+  padding: 0;
+  margin-bottom: 2px;
+}
+.form-grid .radio-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 15px;
+  color: var(--color-primary, #221f1d);
+}
+.form-grid .radio-field input[type='radio'] { width: auto; padding: 0; margin: 0; accent-color: var(--color-secondary); }
+.form-grid .field-hint {
+  font-size: 13px;
+  letter-spacing: normal;
+  text-transform: none;
+  font-style: italic;
+  color: #6a7276;
+  margin-top: -4px;
+}
+.form-nav { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.form-note { font-size: 13px; color: #6a7276; }
+
+@media (min-width: 576px) {
+  .form-grid .radio-field { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .form-grid .radio-field legend { grid-column: 1 / -1; }
 }
