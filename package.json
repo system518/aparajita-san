@@ -5,9 +5,13 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "db:setup": "node scripts/db-setup.mjs"
   },
   "dependencies": {
-    "astro": "^5.13.2"
+    "@astrojs/vercel": "^8.2.11",
+    "@libsql/client": "^0.17.4",
+    "astro": "^5.13.2",
+    "marked": "^18.0.11"
   }
 }

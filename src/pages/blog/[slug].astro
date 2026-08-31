@@ -1,0 +1,56 @@
+---
+export const prerender = false;
+
+import { marked } from 'marked';
+import Base from '../../layouts/Base.astro';
+import { getPostBySlug } from '../../lib/db';
+import { getSessionEmail } from '../../lib/auth';
+
+const { slug } = Astro.params;
+// signed-in editors can preview a post before it is published
+const isEditor = Boolean(getSessionEmail(Astro.cookies));
+const post = await getPostBySlug(slug!, { publishedOnly: !isEditor });
+
+if (!post) return Astro.rewrite('/404');
+
+const html = marked.parse(post.body);
+const date = post.published_at
+  ? new Date(post.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+  : 'Unpublished draft';
+---
+
+<Base title={`${post.title} — Sanmarg : Aparajita`} description={post.description}>
+  <section>
+    <div class="container sec-pad">
+      <div class="row">
+        <div class="col-sm-10 mx-auto">
+          <span class="blog-meta">{date} · {post.author}</span>
+          <h1 class="blog-title">{post.title}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {post.cover && (
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-10 mx-auto">
+            <img src={post.cover} alt={post.title} class="img-fluid w-100 blog-hero" />
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="sec-pad">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 mx-auto">
+          <article class="blog-body" set:html={html} />
+          <p class="mt-5"><a href="/blog" class="theme-btn theme-btn-light">← All posts</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

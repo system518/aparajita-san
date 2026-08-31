@@ -1,0 +1,85 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import AdminScript from '../../components/AdminScript.astro';
+import { readBody } from '../../lib/body';
+import { requireLogin, getSessionEmail } from '../../lib/auth';
+import { listPosts, sql } from '../../lib/db';
+
+const gate = requireLogin(Astro.cookies, (p) => Astro.redirect(p));
+if (gate) return gate;
+
+// publish / unpublish / delete all post back to this page
+if (Astro.request.method === 'POST') {
+  const body = await readBody(Astro.request);
+  const id = Number(body.id);
+  const action = body.action;
+
+  if (action === 'publish') {
+    await sql`UPDATE posts SET published = 1, published_at = COALESCE(published_at, datetime('now')), updated_at = datetime('now') WHERE id = ${id}`;
+  } else if (action === 'unpublish') {
+    await sql`UPDATE posts SET published = 0, updated_at = datetime('now') WHERE id = ${id}`;
+  } else if (action === 'delete') {
+    await sql`DELETE FROM posts WHERE id = ${id}`;
+  }
+  return Astro.redirect('/admin');
+}
+
+const posts = await listPosts({ publishedOnly: false });
+const email = getSessionEmail(Astro.cookies);
+const fmt = (d: string) => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+<Base title="Posts — Aparajita CMS" description="Manage blog posts.">
+  <section class="sec-pad">
+    <div class="container">
+      <div class="admin-bar">
+        <h1 class="admin-h1">Posts</h1>
+        <div class="admin-bar-actions">
+          <a href="/admin/new" class="theme-btn">New post</a>
+          <form method="POST" action="/admin/logout"><button class="link-btn" type="submit">Sign out ({email})</button></form>
+        </div>
+      </div>
+
+      {posts.length === 0 ? (
+        <p>Nothing here yet. <a href="/admin/new">Write the first post →</a></p>
+      ) : (
+        <table class="admin-table">
+          <thead>
+            <tr><th>Title</th><th>Status</th><th>Updated</th><th></th></tr>
+          </thead>
+          <tbody>
+            {posts.map((post) => (
+              <tr>
+                <td>
+                  <a href={`/admin/edit/${post.id}`}>{post.title}</a>
+                  <span class="admin-slug">/blog/{post.slug}</span>
+                </td>
+                <td>
+                  <span class={post.published ? 'pill pill-live' : 'pill'}>
+                    {post.published ? 'Published' : 'Draft'}
+                  </span>
+                </td>
+                <td>{fmt(post.updated_at)}</td>
+                <td class="admin-row-actions">
+                  <form method="POST">
+                    <input type="hidden" name="id" value={post.id} />
+                    <button class="link-btn" name="action" value={post.published ? 'unpublish' : 'publish'}>
+                      {post.published ? 'Unpublish' : 'Publish'}
+                    </button>
+                  </form>
+                  <form method="POST" data-confirm="Delete this post permanently?">
+                    <input type="hidden" name="id" value={post.id} />
+                    <button class="link-btn link-btn-danger" name="action" value="delete">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  </section>
+  <AdminScript />
+</Base>

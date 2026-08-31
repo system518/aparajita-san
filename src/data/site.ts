@@ -30,6 +30,7 @@ export const menu = [
   { label: 'Aparajita Institution', href: '/aparajita-institution' },
   { label: 'Akaar', href: '/akaar' },
   { label: 'Our Partners', href: '/ourpartners' },
+  { label: 'Blog', href: '/blog' },
   { label: 'Archives', href: '/archives' },
 ];
 

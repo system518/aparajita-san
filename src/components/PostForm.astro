@@ -1,0 +1,50 @@
+---
+import type { Post } from '../lib/db';
+
+interface Props {
+  post?: Post | null;
+  error?: string;
+  heading: string;
+}
+
+const { post = null, error = '', heading } = Astro.props;
+---
+
+<div class="admin-bar">
+  <h1 class="admin-h1">{heading}</h1>
+  <a href="/admin" class="link-btn">← All posts</a>
+</div>
+
+{error && <p class="admin-error">{error}</p>}
+
+<form method="POST" class="admin-form">
+  <label>Title<input name="title" required value={post?.title ?? ''} /></label>
+
+  <label>
+    URL slug
+    <input name="slug" value={post?.slug ?? ''} placeholder="left blank, generated from the title" />
+  </label>
+
+  <label>
+    Short summary
+    <textarea name="description" rows="2">{post?.description ?? ''}</textarea>
+  </label>
+
+  <div class="admin-form-row">
+    <label>Author<input name="author" value={post?.author ?? 'Aparajita'} /></label>
+    <label>Cover image URL<input name="cover" value={post?.cover ?? ''} placeholder="/images/1.webp" /></label>
+  </div>
+
+  <label>
+    Post <span class="admin-hint">Markdown — ## heading, **bold**, [link](url), &gt; quote</span>
+    <textarea name="body" rows="22" class="admin-editor">{post?.body ?? ''}</textarea>
+  </label>
+
+  <div class="admin-actions">
+    <button type="submit" name="action" value="save" class="theme-btn theme-btn-light">Save draft</button>
+    <button type="submit" name="action" value="publish" class="theme-btn">
+      {post?.published ? 'Save & update live post' : 'Publish'}
+    </button>
+    {post && <a href={`/blog/${post.slug}`} target="_blank" rel="noopener" class="link-btn">Preview →</a>}
+  </div>
+</form>

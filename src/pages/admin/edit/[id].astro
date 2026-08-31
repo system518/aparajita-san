@@ -1,0 +1,66 @@
+---
+export const prerender = false;
+
+import Base from '../../../layouts/Base.astro';
+import AdminScript from '../../../components/AdminScript.astro';
+import PostForm from '../../../components/PostForm.astro';
+import { readBody } from '../../../lib/body';
+import { requireLogin } from '../../../lib/auth';
+import { sql, getPostById, slugify } from '../../../lib/db';
+
+const gate = requireLogin(Astro.cookies, (p) => Astro.redirect(p));
+if (gate) return gate;
+
+const id = Number(Astro.params.id);
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const body = await readBody(Astro.request);
+  const title = (body.title || '').trim();
+  const slug = slugify(body.slug || title);
+  const publish = body.action === 'publish';
+
+  const clash = await sql`SELECT 1 FROM posts WHERE slug = ${slug} AND id <> ${id}`;
+
+  if (!title) {
+    error = 'A title is required.';
+  } else if (clash.length) {
+    error = `The slug "${slug}" belongs to another post.`;
+  } else {
+    const description = body.description || '';
+    const author = body.author || 'Aparajita';
+    const cover = body.cover || null;
+    const postBody = body.body || '';
+
+    // two statements rather than one, so publishing never clears an existing date
+    await sql`
+      UPDATE posts SET
+        slug = ${slug}, title = ${title}, description = ${description},
+        author = ${author}, cover = ${cover}, body = ${postBody}, updated_at = datetime('now')
+      WHERE id = ${id}`;
+
+    if (publish) {
+      await sql`UPDATE posts SET published = 1, published_at = COALESCE(published_at, datetime('now')) WHERE id = ${id}`;
+    }
+
+    return Astro.redirect(`/admin/edit/${id}?saved=1`);
+  }
+}
+
+const post = await getPostById(id);
+if (!post) return Astro.redirect('/admin');
+
+const saved = Astro.url.searchParams.has('saved');
+---
+
+<Base title={`${post.title} — Aparajita CMS`} description="Edit a blog post.">
+  <section class="sec-pad">
+    <div class="container">
+      <div class="row"><div class="col-sm-10 mx-auto">
+        {saved && <p class="admin-ok">Saved. {post.published ? 'This post is live.' : 'Still a draft — hit Publish when it is ready.'}</p>}
+        <PostForm heading="Edit post" error={error} post={post} />
+      </div></div>
+    </div>
+  </section>
+  <AdminScript />
+</Base>

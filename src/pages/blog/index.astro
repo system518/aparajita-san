@@ -1,0 +1,43 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import { listPosts } from '../../lib/db';
+
+const posts = await listPosts();
+const fmt = (d: string | null) =>
+  d ? new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+---
+
+<Base title="Blog — Sanmarg : Aparajita" description="Stories, updates and reflections from the Aparajita movement.">
+  <section>
+    <div class="container sec-pad">
+      <div class="row">
+        <div class="col-sm-12">
+          <span class="inside-header"><h1>Blog</h1></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-pad">
+    <div class="container">
+      {posts.length === 0 ? (
+        <p>No posts yet.</p>
+      ) : (
+        <div class="row">
+          {posts.map((post) => (
+            <div class="col-sm-4 mt-4">
+              <a class="blog-card" href={`/blog/${post.slug}`}>
+                {post.cover && <img src={post.cover} alt={post.title} class="img-fluid blog-card-img" />}
+                <span class="blog-meta">{fmt(post.published_at)}</span>
+                <h3>{post.title}</h3>
+                <p>{post.description}</p>
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Base>

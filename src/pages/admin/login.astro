@@ -1,0 +1,44 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import AdminScript from '../../components/AdminScript.astro';
+import { readBody } from '../../lib/body';
+import { findUser, verifyPassword, createSession, getSessionEmail } from '../../lib/auth';
+
+if (getSessionEmail(Astro.cookies)) return Astro.redirect('/admin');
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const body = await readBody(Astro.request);
+  const email = body.email || '';
+  const password = body.password || '';
+  const user = await findUser(email);
+
+  if (user && verifyPassword(password, user.password_hash)) {
+    createSession(Astro.cookies, user.email);
+    return Astro.redirect('/admin');
+  }
+  error = 'That email and password combination did not work.';
+}
+---
+
+<Base title="Sign in — Aparajita CMS" description="Editor sign in.">
+  <section class="sec-pad">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-5 mx-auto">
+          <h1 class="admin-h1">Sign in</h1>
+          {error && <p class="admin-error">{error}</p>}
+          <form method="POST" class="admin-form">
+            <label>Email<input type="email" name="email" required autocomplete="username" /></label>
+            <label>Password<input type="password" name="password" required autocomplete="current-password" /></label>
+            <button type="submit" class="theme-btn">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <AdminScript />
+</Base>

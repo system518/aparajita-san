@@ -1,0 +1,52 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import AdminScript from '../../components/AdminScript.astro';
+import PostForm from '../../components/PostForm.astro';
+import { readBody } from '../../lib/body';
+import { requireLogin } from '../../lib/auth';
+import { sql, slugify } from '../../lib/db';
+
+const gate = requireLogin(Astro.cookies, (p) => Astro.redirect(p));
+if (gate) return gate;
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const body = await readBody(Astro.request);
+  const title = (body.title || '').trim();
+  const slug = slugify(body.slug || title);
+  const publish = body.action === 'publish';
+
+  if (!title) {
+    error = 'A title is required.';
+  } else if ((await sql`SELECT 1 FROM posts WHERE slug = ${slug}`).length) {
+    error = `The slug "${slug}" is already taken — give this post a different one.`;
+  } else {
+    await sql`
+      INSERT INTO posts (slug, title, description, author, cover, body, published, published_at, updated_at)
+      VALUES (
+        ${slug}, ${title},
+        ${body.description || ''},
+        ${body.author || 'Aparajita'},
+        ${body.cover || null},
+        ${body.body || ''},
+        ${publish ? 1 : 0}, ${publish ? new Date().toISOString() : null}, ${new Date().toISOString()}
+      )`;
+    const rows = await sql`SELECT id FROM posts WHERE slug = ${slug} LIMIT 1`;
+    return Astro.redirect(`/admin/edit/${rows[0].id}?saved=1`);
+  }
+}
+---
+
+<Base title="New post — Aparajita CMS" description="Write a new blog post.">
+  <section class="sec-pad">
+    <div class="container">
+      <div class="row"><div class="col-sm-10 mx-auto">
+        <PostForm heading="New post" error={error} />
+      </div></div>
+    </div>
+  </section>
+  <AdminScript />
+</Base>
