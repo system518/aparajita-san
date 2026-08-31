@@ -37,6 +37,7 @@ const { post = null, error = '', heading } = Astro.props;
 
   <label>
     Post <span class="admin-hint">Markdown — ## heading, **bold**, [link](url), &gt; quote</span>
+    <span class="admin-hint">Write your draft in plain text or Word, then ask ChatGPT to "convert this to Markdown" and paste the result here.</span>
     <textarea name="body" rows="22" class="admin-editor">{post?.body ?? ''}</textarea>
   </label>
 
