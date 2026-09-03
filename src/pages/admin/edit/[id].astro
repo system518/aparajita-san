@@ -53,7 +53,7 @@ if (!post) return Astro.redirect('/admin');
 const saved = Astro.url.searchParams.has('saved');
 ---
 
-<Base title={`${post.title} — Aparajita CMS`} description="Edit a blog post.">
+<Base title={`${post.title} — Aparajita CMS`} description="Edit a blog post." noindex>
   <section class="sec-pad">
     <div class="container">
       <div class="row"><div class="col-sm-10 mx-auto">

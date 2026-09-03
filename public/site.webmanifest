@@ -1,0 +1,13 @@
+{
+  "name": "Sanmarg : Aparajita",
+  "short_name": "Aparajita",
+  "description": "Aparajita: a decade-old platform empowering women achievers in East India.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8c1d40",
+  "icons": [
+    { "src": "/images/cropped-android-chrome-192x192-1-192x192.webp", "sizes": "192x192", "type": "image/webp" },
+    { "src": "/images/cropped-android-chrome-192x192-1-270x270.webp", "sizes": "270x270", "type": "image/webp" }
+  ]
+}

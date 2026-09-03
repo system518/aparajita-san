@@ -7,9 +7,36 @@ import { listPosts } from '../../lib/db';
 const posts = await listPosts();
 const fmt = (d: string | null) =>
   d ? new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Aparajita Blog',
+    url: 'https://aparajita.sanmarg.in/blog',
+    blogPost: posts.slice(0, 20).map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: `https://aparajita.sanmarg.in/blog/${post.slug}`,
+      datePublished: post.published_at ?? undefined,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://aparajita.sanmarg.in/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://aparajita.sanmarg.in/blog' },
+    ],
+  },
+];
 ---
 
-<Base title="Blog — Sanmarg : Aparajita" description="Stories, updates and reflections from the Aparajita movement.">
+<Base
+  title="Blog — Sanmarg : Aparajita"
+  description="Stories, updates and reflections from the Aparajita movement."
+  jsonLd={jsonLd}
+>
   <section>
     <div class="container sec-pad">
       <div class="row">

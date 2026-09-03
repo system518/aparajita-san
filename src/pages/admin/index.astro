@@ -31,7 +31,7 @@ const email = getSessionEmail(Astro.cookies);
 const fmt = (d: string) => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 
-<Base title="Posts — Aparajita CMS" description="Manage blog posts.">
+<Base title="Posts — Aparajita CMS" description="Manage blog posts." noindex>
   <section class="sec-pad">
     <div class="container">
       <div class="admin-bar">

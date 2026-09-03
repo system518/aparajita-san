@@ -17,9 +17,51 @@ const html = marked.parse(post.body);
 const date = post.published_at
   ? new Date(post.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
   : 'Unpublished draft';
+
+const canonicalPath = `https://aparajita.sanmarg.in/blog/${post.slug}`;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    image: post.cover ? new URL(post.cover, 'https://aparajita.sanmarg.in').toString() : undefined,
+    datePublished: post.published_at ?? undefined,
+    dateModified: post.updated_at,
+    author: { '@type': 'Person', name: post.author },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Sanmarg : Aparajita',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://aparajita.sanmarg.in/images/cropped-android-chrome-192x192-1.webp',
+      },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalPath },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://aparajita.sanmarg.in/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://aparajita.sanmarg.in/blog' },
+      { '@type': 'ListItem', position: 3, name: post.title, item: canonicalPath },
+    ],
+  },
+];
 ---
 
-<Base title={`${post.title} — Sanmarg : Aparajita`} description={post.description}>
+<Base
+  title={`${post.title} — Sanmarg : Aparajita`}
+  description={post.description}
+  image={post.cover ?? undefined}
+  type="article"
+  publishedTime={post.published_at}
+  modifiedTime={post.updated_at}
+  author={post.author}
+  noindex={!post.published}
+  jsonLd={jsonLd}
+>
   <section>
     <div class="container sec-pad">
       <div class="row">
