@@ -57,6 +57,16 @@ const { title, description } = Astro.props;
           if (!video.dataset.src) video.dataset.src = video.src;
         });
 
+        // Self-hosted <video> follows the same rule as the embeds: it must not
+        // be playing while its year is collapsed. The element carries autoplay
+        // for the case where a panel is already open on load, so strip that
+        // here and let the open/close handlers below drive playback instead.
+        const mediaVideos = Array.from(panel.querySelectorAll<HTMLVideoElement>('video'));
+        mediaVideos.forEach((video) => {
+          video.autoplay = false;
+          video.muted = true;
+        });
+
         const playVideos = () => {
           videos.forEach((video) => {
             const base = video.dataset.src ?? '';
@@ -67,6 +77,15 @@ const { title, description } = Astro.props;
             url.searchParams.set('playsinline', '1');
             video.src = url.toString();
           });
+          mediaVideos.forEach((video) => {
+            // Muted is what makes an unprompted start permissible at all; the
+            // visitor can unmute from the controls once it is running.
+            video.muted = true;
+            void video.play().catch(() => {
+              // A browser that still refuses leaves the poster and controls up,
+              // which is a fine resting state - nothing to recover from.
+            });
+          });
         };
 
         const stopVideos = () => {
@@ -74,6 +93,10 @@ const { title, description } = Astro.props;
           // and video; blanking it instead would leave an empty box behind.
           videos.forEach((video) => {
             if (video.dataset.src) video.src = video.dataset.src;
+          });
+          mediaVideos.forEach((video) => {
+            video.pause();
+            video.currentTime = 0;
           });
         };
 
