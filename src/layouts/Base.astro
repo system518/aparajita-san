@@ -7,9 +7,63 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   description: string;
+  /** Absolute or root-relative image used for social previews. */
+  image?: string;
+  /** Overrides og:type; defaults to "website" ("article" for blog posts). */
+  type?: 'website' | 'article';
+  /** Excludes the page from search indexing (e.g. admin, thank-you pages). */
+  noindex?: boolean;
+  /** Extra <link>/<meta>/<script type="application/ld+json"> tags injected into <head>. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** ISO date strings, for article pages. */
+  publishedTime?: string | null;
+  modifiedTime?: string | null;
+  author?: string;
 }
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  image = '/images/cropped-android-chrome-192x192-1.webp',
+  type = 'website',
+  noindex = false,
+  jsonLd,
+  publishedTime,
+  modifiedTime,
+  author,
+} = Astro.props;
+
+const siteName = 'Sanmarg : Aparajita';
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const absoluteImage = new URL(image, Astro.site).toString();
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteName,
+  alternateName: 'Aparajita',
+  url: 'https://aparajita.sanmarg.in/',
+  logo: 'https://aparajita.sanmarg.in/images/cropped-android-chrome-192x192-1.webp',
+  sameAs: ['https://sanmarg.in'],
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteName,
+  url: 'https://aparajita.sanmarg.in/',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://aparajita.sanmarg.in/blog?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const ldBlocks = [
+  organizationSchema,
+  websiteSchema,
+  ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
+];
 ---
 
 <!doctype html>
@@ -19,12 +73,40 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <meta name="robots" content="index, follow, max-image-preview:large" />
+    )}
+    <meta name="theme-color" content="#8c1d40" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/images/cropped-android-chrome-192x192-1.webp" />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={absoluteImage} />
+    <meta property="og:locale" content="en_IN" />
+    {type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {type === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+    {type === 'article' && author && <meta property="article:author" content={author} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteImage} />
+
     <link rel="icon" href="/images/cropped-android-chrome-192x192-1-32x32.webp" />
     <link rel="apple-touch-icon" href="/images/cropped-android-chrome-192x192-1-180x180.webp" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap.xml" />
+
+    {ldBlocks.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
   </head>
   <body>
     <Header />

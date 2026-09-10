@@ -1,0 +1,70 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import { listPosts } from '../../lib/db';
+
+const posts = await listPosts();
+const fmt = (d: string | null) =>
+  d ? new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Aparajita Blog',
+    url: 'https://aparajita.sanmarg.in/blog',
+    blogPost: posts.slice(0, 20).map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: `https://aparajita.sanmarg.in/blog/${post.slug}`,
+      datePublished: post.published_at ?? undefined,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://aparajita.sanmarg.in/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://aparajita.sanmarg.in/blog' },
+    ],
+  },
+];
+---
+
+<Base
+  title="Blog — Sanmarg : Aparajita"
+  description="Stories, updates and reflections from the Aparajita movement."
+  jsonLd={jsonLd}
+>
+  <section>
+    <div class="container sec-pad">
+      <div class="row">
+        <div class="col-sm-12">
+          <span class="inside-header"><h1>Blog</h1></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-pad">
+    <div class="container">
+      {posts.length === 0 ? (
+        <p>No posts yet.</p>
+      ) : (
+        <div class="row">
+          {posts.map((post) => (
+            <div class="col-sm-4 mt-4">
+              <a class="blog-card" href={`/blog/${post.slug}`}>
+                {post.cover && <img src={post.cover} alt={post.title} class="img-fluid blog-card-img" />}
+                <span class="blog-meta">{fmt(post.published_at)}</span>
+                <h3>{post.title}</h3>
+                <p>{post.description}</p>
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
