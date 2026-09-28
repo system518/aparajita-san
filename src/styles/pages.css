@@ -381,6 +381,13 @@ hr { border: 0; border-top: 1px solid rgba(0,0,0,0.12); width: 100%; margin: 28p
   margin: 0;
 }
 .fix-height { min-height: 52px; }
+/* Popular Awards 2026 (archives): uniform photo size */
+[id$="_nominee2"] .img-fluid {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: top center;
+}
 .company,
 .category {
   font-family: var(--font-secondary);
